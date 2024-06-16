@@ -13,6 +13,7 @@ public class View {
     }
 
     public void promptForPlayerName() {
+        System.out.println("Enter player name: ");
         String name = scanner.nextLine();
         if(name.isEmpty()) {
             gameController.startGame();

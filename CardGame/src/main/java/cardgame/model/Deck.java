@@ -13,7 +13,7 @@ public class Deck {
 
         for(Rank currRank: Rank.values()) {
             for(Suit currSuit: Suit.values()) {
-                System.out.println(String.format("Adding card %s of %s", currRank.value(), currSuit.value()));
+                System.out.println(String.format("Creating card [%s] of [%s]", currRank, currSuit));
                 this.cards.add(new PlayingCard(currRank, currSuit));
             }
         }
