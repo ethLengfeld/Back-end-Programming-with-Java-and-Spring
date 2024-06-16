@@ -15,6 +15,10 @@ public class PlayingCard {
         return this.rank;
     }
 
+    public Suit getSuit() {
+        return this.suit;
+    }
+
     public boolean getIsFaceUp() {
         return this.isFaceUp;
     }

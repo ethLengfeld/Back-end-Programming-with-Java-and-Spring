@@ -9,6 +9,9 @@ public class Player {
         this.hand = new Hand();
     }
 
+    public String getName() {
+        return this.name;
+    }
     public void addCardToHand(PlayingCard playingCard) {
         this.hand.addCard(playingCard);
     }

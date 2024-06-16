@@ -20,22 +20,18 @@ public class Deck {
         this.shuffle();
     }
 
-    private void shuffle() {
+    public void shuffle() {
         Random random = new Random();
         for(int i = 0; i < this.cards.size(); i++) {
             Collections.swap(this.cards, i, random.nextInt(this.cards.size()));
         }
     }
 
-    private PlayingCard removeTopCard() {
+    public PlayingCard removeTopCard() {
         return this.cards.remove(0);
     }
 
-    private void returnCardToDeck(PlayingCard playingCard) {
+    public void returnCardToDeck(PlayingCard playingCard) {
         this.cards.add(playingCard);
-    }
-
-    public static void main(String[] args) {
-        Deck deck = new Deck();
     }
 }
