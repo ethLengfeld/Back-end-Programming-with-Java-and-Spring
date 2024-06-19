@@ -26,4 +26,4 @@
 2. View
    1. Presents data to the user. Presents model information to the user
 3. Controller
-   1. Sequences program rules. Makes sure that user commands are executed correctly, modifying the appropriate model objects, and updating the view objects.
+   1. Sequences program rules. Makes sure that user commands are executed correctly, modifying the appropriate model objects, and updating the commandLineView objects.

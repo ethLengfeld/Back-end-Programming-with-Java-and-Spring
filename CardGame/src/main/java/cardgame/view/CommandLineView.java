@@ -4,7 +4,7 @@ import cardgame.controller.GameController;
 
 import java.util.Scanner;
 
-public class View {
+public class CommandLineView implements GameViewable {
     private GameController gameController;
     Scanner scanner = new Scanner(System.in);
 

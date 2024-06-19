@@ -4,7 +4,7 @@ import cardgame.games.GameEvaluator;
 import cardgame.model.Deck;
 import cardgame.model.Player;
 import cardgame.model.PlayingCard;
-import cardgame.view.View;
+import cardgame.view.GameViewable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,11 @@ public class GameController {
     private Deck deck;
     private List<Player> players;
     private Player winner;
-    private View view;
+    private GameViewable view;
     private GameState gameState;
     private GameEvaluator evaluator;
 
-    public GameController(View view, Deck deck, GameEvaluator evaluator) {
+    public GameController(GameViewable view, Deck deck, GameEvaluator evaluator) {
         this.view = view;
         this.deck = deck;
         this.players = new ArrayList<>();
