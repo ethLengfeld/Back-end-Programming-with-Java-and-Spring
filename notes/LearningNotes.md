@@ -5,8 +5,14 @@
 ### SOLID Design Principles
 1. "S" is for Single responsibility
    A class should do one thing, and do it well. It should only have one reason to change.
+   - unit tests are easier to write
+   - somewhere that doesn't need to change
 2. "O" is for Open/closed principle
    A class should be open to extension, but closed to modification.
+   - algos that perform a calculation - likely to change. Create interface first, then add specific implementations
+   - data coming or going from system - endpoint, database, external system. again, create interface
+   - the "closed" class (our controller) is the class that doesn't change.
+   - the "open" class (GameEvaluator interface) allows for flexibility of implementation, so we can easily change rules of the game.
 3. "L" for Liskov substitutability
    Adding a subtype through inheritance should not break the existing code. I call this the "no surprises" principle. That is, if the system is working and I add a new class that is derived from another, the system should still work.
 4. "I" for Interface segregation
