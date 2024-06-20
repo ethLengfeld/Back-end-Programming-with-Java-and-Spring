@@ -81,6 +81,11 @@ public class GameController {
         this.gameState = GameState.WinnerRevealed;
     }
 
+    public void restartGame() {
+        this.rebuildDeck();
+        this.gameState = GameState.AddingPlayers;
+    }
+
     private void evaluateWinner() {
         winner = this.evaluator.evaluateWinner(this.players);
     }

@@ -15,8 +15,13 @@
    - the "open" class (GameEvaluator interface) allows for flexibility of implementation, so we can easily change rules of the game.
 3. "L" for Liskov substitutability
    Adding a subtype through inheritance should not break the existing code. I call this the "no surprises" principle. That is, if the system is working and I add a new class that is derived from another, the system should still work.
+   - Barbara Liskov
+   - Adding derived classes shouldn't break functionality of an already existing system
+   - Ask yourself
+     - Does the derived class have a meaningful implementation of all overridden methods? If so, good case
 4. "I" for Interface segregation
    Essentially the single responsibility principle, applied to interfaces.
+   - Interface does one specific thing really well.
 5. "D" is for Dependency inversion
    High-level classes shouldn't have to change when a low-level class is modified. High-level classes should define an abstraction that the lower-level class conforms to.
 
