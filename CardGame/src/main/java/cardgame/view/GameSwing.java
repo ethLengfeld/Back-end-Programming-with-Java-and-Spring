@@ -21,7 +21,7 @@ public class GameSwing implements GameViewable {
     JButton btnDealCards;
     JButton btnFindWinner;
     JTextArea textArea;
-    char nextPlayerName = 'A';
+    static char nextPlayerName = 'A';
 
     public void createAndShowGUI() {
         // create the main display area, with enough initial space
@@ -36,10 +36,24 @@ public class GameSwing implements GameViewable {
         addAddPlayerButton(contentPane);
         addDealCardsButton(contentPane);
         addFindWinnerButton(contentPane);
+        addNewWindow(contentPane);
 
         addControllerCommandTracker(contentPane);
 
         frame.setVisible(true);
+    }
+
+    private void addNewWindow(Container contentPane) {
+        JButton btnAddWindow = new JButton("Add Window");
+        addCenteredComponent(btnAddWindow, contentPane);
+        btnAddWindow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameSwing game = new GameSwing();
+                game.createAndShowGUI();
+                controller.addViewable(game);
+            }
+        });
     }
 
     // when clicked, tell controller to add a player of the given name

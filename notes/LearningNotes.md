@@ -32,3 +32,17 @@
    1. Presents data to the user. Presents model information to the user
 3. Controller
    1. Sequences program rules. Makes sure that user commands are executed correctly, modifying the appropriate model objects, and updating the commandLineView objects.
+
+### Design Patterns
+- Creational patterns add a level of indirection to object creation, adding flexibility to applications.
+  - The factory pattern has an object create another object. You can configure the factory to make an object just the way you want it.
+  - The prototype pattern creates a new object by cloning an existing object.
+  - The builder pattern creates a complex object by assembling various other objects into the single, complex item.
+- Structural patterns are ways of organizing classes or objects so that they are easy to use.
+  - The adapter pattern changes the interface of a class from non-compatible, to one that is expected.
+  - The composite pattern allows individual and collection objects to be treated the same.
+  - The decorator pattern allows for additional behavior to be added and removed at runtime.
+- Behavioral patterns
+  - The observer pattern allows a state change in one object to be acted upon by many dependencies.
+  - The strategy pattern allows for individual algorithms to be chosen for specific situations.
+  - The state pattern allows for system behavior to vary depending on the current situation.

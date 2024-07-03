@@ -1,24 +1,23 @@
 package cardgame.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Deck {
-    private List<PlayingCard> cards;
+public abstract class Deck {
+    List<PlayingCard> cards;
 
-    public Deck() {
-        this.cards = new ArrayList<>();
-
-        for(Rank currRank: Rank.values()) {
-            for(Suit currSuit: Suit.values()) {
-                System.out.println(String.format("Creating card [%s] of [%s]", currRank, currSuit));
-                this.cards.add(new PlayingCard(currRank, currSuit));
-            }
-        }
-        this.shuffle();
-    }
+//    public Deck() {
+//        this.cards = new ArrayList<>();
+//
+//        for(Rank currRank: Rank.values()) {
+//            for(Suit currSuit: Suit.values()) {
+//                System.out.println(String.format("Creating card [%s] of [%s]", currRank, currSuit));
+//                this.cards.add(new PlayingCard(currRank, currSuit));
+//            }
+//        }
+//        this.shuffle();
+//    }
 
     public void shuffle() {
         Random random = new Random();

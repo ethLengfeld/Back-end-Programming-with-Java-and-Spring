@@ -1,48 +1,66 @@
 package cardgame.controller;
 
 import cardgame.games.GameEvaluator;
-import cardgame.model.Deck;
-import cardgame.model.Player;
-import cardgame.model.PlayingCard;
+import cardgame.model.*;
+import cardgame.view.GameSwing;
 import cardgame.view.GameViewable;
+import cardgame.view.GameViewables;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
+
     enum GameState {
         AddingPlayers,
         CardsDealt,
-        WinnerRevealed;
+        WinnerRevealed,
+        AddingView;
     }
 
     private Deck deck;
-    private List<Player> players;
-    private Player winner;
-    private GameViewable view;
+    private List<IPlayer> IPlayers;
+    private IPlayer winner;
+    private GameViewables views;
     private GameState gameState;
     private GameEvaluator evaluator;
 
     public GameController(GameViewable view, Deck deck, GameEvaluator evaluator) {
-        this.view = view;
+        this.views = new GameViewables();
         this.deck = deck;
-        this.players = new ArrayList<>();
+        this.IPlayers = new ArrayList<>();
         this.gameState = GameState.AddingPlayers;
-        this.view.setController(this);
         this.evaluator = evaluator;
+        addViewable(view);
     }
+
+    public void addViewable(GameViewable newView) {
+        GameState currState = gameState;
+        gameState = GameState.AddingView;
+        newView.setController(this);
+        views.addViewable(newView);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        gameState = currState;
+    }
+
 
     public void run() {
         while(true) {
             switch(this.gameState) {
                 case AddingPlayers:
-                    this.view.promptForPlayerName();
+                    this.views.promptForPlayerName();
                     break;
                 case CardsDealt:
-                    this.view.promptForFlip();
+                    this.views.promptForFlip();
                     break;
                 case WinnerRevealed:
-                    this.view.promptForNewGame();
+                    this.views.promptForNewGame();
+                    break;
+                case AddingView:
                     break;
             }
         }
@@ -50,8 +68,8 @@ public class GameController {
 
     public void addPlayer(String playerName) {
         if(this.gameState == GameState.AddingPlayers) {
-            this.players.add(new Player(playerName));
-            this.view.showPlayerName(this.players.size(), playerName);
+            this.IPlayers.add(new Player(playerName));
+            this.views.showPlayerName(this.IPlayers.size(), playerName);
         }
     }
 
@@ -59,9 +77,9 @@ public class GameController {
         if(this.gameState != GameState.CardsDealt) {
             this.deck.shuffle();
             int playerIndex = 1;
-            for(Player currPlayer: this.players) {
-                currPlayer.addCardToHand(deck.removeTopCard());
-                this.view.showFaceDownCardForPlayer(playerIndex++, currPlayer.getName());
+            for(IPlayer currIPlayer : this.IPlayers) {
+                currIPlayer.addCardToHand(deck.removeTopCard());
+                this.views.showFaceDownCardForPlayer(playerIndex++, currIPlayer.getName());
             }
             this.gameState = GameState.CardsDealt;
         }
@@ -69,10 +87,10 @@ public class GameController {
 
     public void flipCards() {
         int playerIndex = 1;
-        for(Player currPlayer:this.players) {
-            PlayingCard playingCard = currPlayer.getCard(0);
+        for(IPlayer currIPlayer :this.IPlayers) {
+            PlayingCard playingCard = currIPlayer.getCard(0);
             playingCard.flip();
-            this.view.showCardForPlayer(playerIndex++, currPlayer.getName(), playingCard.getRank().toString(), playingCard.getSuit().toString());
+            this.views.showCardForPlayer(playerIndex++, currIPlayer.getName(), playingCard.getRank().toString(), playingCard.getSuit().toString());
         }
 
         this.evaluateWinner();
@@ -87,16 +105,16 @@ public class GameController {
     }
 
     private void evaluateWinner() {
-        winner = this.evaluator.evaluateWinner(this.players);
+        winner = new WinningPlayer(this.evaluator.evaluateWinner(this.IPlayers));
     }
 
     private void displayWinner() {
-        view.showWinner(this.winner.getName());
+        views.showWinner(this.winner.getName());
     }
 
     private void rebuildDeck() {
-        for(Player currPlayer:this.players) {
-            this.deck.returnCardToDeck(currPlayer.removeCard());
+        for(IPlayer currIPlayer :this.IPlayers) {
+            this.deck.returnCardToDeck(currIPlayer.removeCard());
         }
     }
 }

@@ -1,24 +1,24 @@
 package cardgame.games;
 
-import cardgame.model.Player;
+import cardgame.model.IPlayer;
 import cardgame.model.PlayingCard;
 
 import java.util.List;
 
 public class GameEvaluator {
 
-    public Player evaluateWinner(List<Player> players) {
-        Player bestPlayer = null;
+    public IPlayer evaluateWinner(List<IPlayer> IPlayers) {
+        IPlayer bestIPlayer = null;
         int bestRank = -1;
         int bestSuit = -1;
 
-        for(Player currPlayer:players) {
+        for(IPlayer currIPlayer : IPlayers) {
             boolean newBestPlayer = false;
 
-            if(bestPlayer == null) {
+            if(bestIPlayer == null) {
                 newBestPlayer = true;
             } else {
-                PlayingCard playingCard = currPlayer.getCard(0);
+                PlayingCard playingCard = currIPlayer.getCard(0);
                 int currRank = playingCard.getRank().value();
                 if(currRank >= bestRank) {
                     if(currRank > bestRank) {
@@ -31,12 +31,12 @@ public class GameEvaluator {
                 }
             }
             if(newBestPlayer) {
-                bestPlayer = currPlayer;
-                PlayingCard playingCard = bestPlayer.getCard(0);
+                bestIPlayer = currIPlayer;
+                PlayingCard playingCard = bestIPlayer.getCard(0);
                 bestRank = playingCard.getRank().value();
                 bestSuit = playingCard.getSuit().value();
             }
         }
-        return bestPlayer;
+        return bestIPlayer;
     }
 }
