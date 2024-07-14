@@ -72,3 +72,27 @@
   - ex. Game of Thrones website, if the character of Jon Snow has the ID 890, the URI would be  /characters/890. The URL would be https://gameofthrones-information.com/characters/890
 - Requests take the form: HTTP Verb + URI + HTTP Version + Headers + Optional Message Body
 - Responses take the form: HTTP Response Code + HTTP Version + Headers + Message Body.
+- CRUD Action - Associated HTTP Verb
+  - Create - POST
+  - Read - GET
+  - Update - PUT
+  - Delete - DELETE
+- Create own REST API
+  - Designing API
+    1. What kind of endpoints will you need?
+    2. What resources do you need to create?
+    3. What resources will you need to preform CRUD operations on?
+    4. Do you need all four CRUD operations for each resource?
+- Advanced Endpoint Functionality
+  1. Filter - ?
+  2. Search - ?
+  3. Sort - &
+  4. Paginate - don't return all results
+  5. Versioning - app stays backward compatible.
+- REST API Frameworks
+  1. Express.js - Javascript
+  2. Ruby on Rails - Ruby
+  3. Django - Python
+  4. Flask - Python
+  5. Spring - Java - https://spring.io/projects/spring-boot
+  6. AWS API Gateway & AWS Lambda
