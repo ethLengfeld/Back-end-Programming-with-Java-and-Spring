@@ -96,3 +96,17 @@
   4. Flask - Python
   5. Spring - Java - https://spring.io/projects/spring-boot
   6. AWS API Gateway & AWS Lambda
+
+
+## Create Web Applications Efficiently With the Spring Boot MVC Framework
+
+### Ways to Package & Deploy app
+- Packing with a fat JAR:
+  - A fat JAR includes compiled code, resources, and a servlet container. 
+  - It is streamlined, without the hassle of installing a web server and deploying the app to a server.
+  - ex. `java -jar <path to generated JAR file (.jar)>`
+- Packaging with a WAR file:
+  - A WAR file is a compressed file that contains multiple file bundles. 
+  - It requires the installation of a web server, like Tomcat. 
+  - It used to be a standard practice, but is less popular than using fat JARs.
+- Using Maven without packaging.
