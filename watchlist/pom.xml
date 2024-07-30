@@ -14,7 +14,7 @@
 	<name>watchlist</name>
 	<description>OpenClassrooms Watchlist application</description>
 	<!-- Generate WAR file -->
-	<packaging>war</packaging>
+<!--	<packaging>war</packaging>-->
 	<url/>
 	<licenses>
 		<license/>
@@ -41,11 +41,11 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<!-- Generate WAR file -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
