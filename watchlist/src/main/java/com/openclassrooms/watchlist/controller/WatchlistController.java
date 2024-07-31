@@ -14,7 +14,7 @@ public class WatchlistController {
     public ModelAndView getWatchlist(){
         String viewName = "watchlist";
 
-        Map<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
 
         model.put("numberOfMovies", "1234");
 
