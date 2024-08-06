@@ -1,6 +1,5 @@
 package org.safetynet.alerts;
 
-import org.apache.el.parser.AstLessThan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
