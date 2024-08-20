@@ -1,11 +1,22 @@
 package com.openclassrooms.watchlist.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class WatchlistItem {
+
     private Integer id;
+
+    @NotBlank(message="Please enter the title")
     private String title;
+
     private String rating;
+
     private String priority;
+
+    @Size(max=50, message="Comment should be maximum of 50 characters")
     private String comment;
+
     public static int index = 0;
 
     public WatchlistItem() {
