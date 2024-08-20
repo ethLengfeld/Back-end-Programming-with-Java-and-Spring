@@ -1,8 +1,14 @@
 package com.openclassrooms.watchlist.model;
 
+import com.openclassrooms.watchlist.annotations.GoodMovie;
+import com.openclassrooms.watchlist.annotations.BadMovie;
+import com.openclassrooms.watchlist.annotations.Priority;
+import com.openclassrooms.watchlist.annotations.Rating;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@GoodMovie
+@BadMovie
 public class WatchlistItem {
 
     private Integer id;
@@ -10,8 +16,10 @@ public class WatchlistItem {
     @NotBlank(message="Please enter the title")
     private String title;
 
+    @Rating
     private String rating;
 
+    @Priority
     private String priority;
 
     @Size(max=50, message="Comment should be maximum of 50 characters")
