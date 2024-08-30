@@ -1,9 +1,18 @@
 package org.safetynet.alerts.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.safetynet.alerts.model.FireStation;
+import org.safetynet.alerts.model.Person;
 import org.safetynet.alerts.service.DataLoaderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AlertsController {
 
+    @Autowired
     private DataLoaderService dataLoaderService;
 
     @GetMapping("/hello")
@@ -31,12 +41,40 @@ public class AlertsController {
      * @return
      */
     @GetMapping("/firestation")
-    public ResponseEntity<String> getPeopleServicedByStationNumber(@RequestParam Integer stationNumber) {
+    public ResponseEntity<String> getPersonsServicedByStationNumber(@RequestParam Integer stationNumber) throws JsonProcessingException {
         List<FireStation> stations = dataLoaderService.getFireStations();
+        List<String> servicedAddresses = new ArrayList<>();
         for (FireStation station : stations) {
-
+            if (station.getStation() == stationNumber) {
+                servicedAddresses.add(station.getAddress());
+            }
         }
-        return new ResponseEntity<>("Here is the list of People serviced by that Station Number-" + stationNumber, HttpStatus.OK);
+        List<Person> servicedPersons = new ArrayList<>();
+        List<Person> persons = dataLoaderService.getPersons();
+        for (Person person : persons) {
+            if(servicedAddresses.contains(person.getAddress())) {
+                servicedPersons.add(person);
+            }
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode rootNode = mapper.createObjectNode();
+        ArrayNode arrayNode = mapper.createArrayNode();
+
+        for (Person person : servicedPersons) {
+            ObjectNode personNode = mapper.createObjectNode();
+            personNode.put("firstName", person.getFirstName());
+            personNode.put("lastName", person.getLastName());
+            personNode.put("address", person.getAddress());
+            personNode.put("phone", person.getPhone());
+            arrayNode.add(personNode);
+        }
+
+        rootNode.set("persons", arrayNode);
+        //TODO get birthdates
+        rootNode.put("numberOfAdults", "TODO");
+        rootNode.put("numberOfChildren", "TODO");
+
+        return new ResponseEntity<>(mapper.writeValueAsString(rootNode), HttpStatus.OK);
     }
 
     /**
