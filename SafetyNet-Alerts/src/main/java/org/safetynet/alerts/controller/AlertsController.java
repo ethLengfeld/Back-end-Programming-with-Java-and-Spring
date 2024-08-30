@@ -1,5 +1,9 @@
 package org.safetynet.alerts.controller;
 
+import java.util.List;
+
+import org.safetynet.alerts.model.FireStation;
+import org.safetynet.alerts.service.DataLoaderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -8,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AlertsController {
+
+    private DataLoaderService dataLoaderService;
 
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
@@ -26,6 +32,10 @@ public class AlertsController {
      */
     @GetMapping("/firestation")
     public ResponseEntity<String> getPeopleServicedByStationNumber(@RequestParam Integer stationNumber) {
+        List<FireStation> stations = dataLoaderService.getFireStations();
+        for (FireStation station : stations) {
+
+        }
         return new ResponseEntity<>("Here is the list of People serviced by that Station Number-" + stationNumber, HttpStatus.OK);
     }
 
