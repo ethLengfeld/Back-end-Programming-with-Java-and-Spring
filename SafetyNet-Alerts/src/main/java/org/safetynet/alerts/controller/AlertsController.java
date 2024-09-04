@@ -3,6 +3,7 @@ package org.safetynet.alerts.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,16 +43,16 @@ public class AlertsController {
      */
     @GetMapping("/firestation")
     public ResponseEntity<String> getPersonsServicedByStationNumber(@RequestParam Integer stationNumber) throws JsonProcessingException {
-        List<FireStation> stations = dataLoaderService.getFireStations();
+        Map<String, FireStation> stations = dataLoaderService.getFireStations();
         List<String> servicedAddresses = new ArrayList<>();
-        for (FireStation station : stations) {
-            if (station.getStation() == stationNumber) {
-                servicedAddresses.add(station.getAddress());
+        for (String stationAddress : stations.keySet()) {
+            if (stations.get(stationAddress).getStation() == stationNumber) {
+                servicedAddresses.add(stationAddress);
             }
         }
         List<Person> servicedPersons = new ArrayList<>();
         List<Person> persons = dataLoaderService.getPersons();
-        for (Person person : persons) {
+        for (String address : ) {
             if(servicedAddresses.contains(person.getAddress())) {
                 servicedPersons.add(person);
             }
@@ -99,6 +100,7 @@ public class AlertsController {
      */
     @GetMapping("/phoneAlert")
     public ResponseEntity<String> getPhoneNumbersForPeopleByStationNumber(@RequestParam Integer stationNumber) {
+
         return new ResponseEntity<>("Here is the list of Phone Numbers for each person serviced by this Station Number-" + stationNumber, HttpStatus.OK);
     }
 
