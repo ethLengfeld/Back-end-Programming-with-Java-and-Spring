@@ -11,8 +11,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.safetynet.alerts.model.FireStation;
+import org.safetynet.alerts.model.MedicalRecord;
 import org.safetynet.alerts.model.Person;
 import org.safetynet.alerts.service.DataLoaderService;
+import org.safetynet.alerts.utils.DataValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,24 +45,26 @@ public class AlertsController {
      */
     @GetMapping("/firestation")
     public ResponseEntity<String> getPersonsServicedByStationNumber(@RequestParam Integer stationNumber) throws JsonProcessingException {
-        Map<String, FireStation> stations = dataLoaderService.getFireStations();
+        Map<String, FireStation> stationsMap = dataLoaderService.getFireStations();
         List<String> servicedAddresses = new ArrayList<>();
-        for (String stationAddress : stations.keySet()) {
-            if (stations.get(stationAddress).getStation() == stationNumber) {
+        for (String stationAddress : stationsMap.keySet()) {
+            if (stationsMap.get(stationAddress).getStation() == stationNumber) {
                 servicedAddresses.add(stationAddress);
             }
         }
         List<Person> servicedPersons = new ArrayList<>();
-        List<Person> persons = dataLoaderService.getPersons();
-        for (String address : ) {
-            if(servicedAddresses.contains(person.getAddress())) {
-                servicedPersons.add(person);
+        Map<String, Person> personsMap = dataLoaderService.getPersons();
+        for (String person : personsMap.keySet()) {
+            if (servicedAddresses.contains(personsMap.get(person).getAddress())) {
+                servicedPersons.add(personsMap.get(person));
             }
         }
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
         ArrayNode arrayNode = mapper.createArrayNode();
 
+        Map<String, MedicalRecord> medicalRecordMap = dataLoaderService.getMedicalRecords();
+        int numberOfAdults = 0, numberOfChildren = 0;
         for (Person person : servicedPersons) {
             ObjectNode personNode = mapper.createObjectNode();
             personNode.put("firstName", person.getFirstName());
@@ -68,12 +72,17 @@ public class AlertsController {
             personNode.put("address", person.getAddress());
             personNode.put("phone", person.getPhone());
             arrayNode.add(personNode);
+
+            if(DataValidationUtil.isAdult(medicalRecordMap.get(person.getFirstName()+"-"+person.getLastName()).getBirthdate())) {
+                numberOfAdults++;
+            } else {
+                numberOfChildren++;
+            }
         }
 
         rootNode.set("persons", arrayNode);
-        //TODO get birthdates
-        rootNode.put("numberOfAdults", "TODO");
-        rootNode.put("numberOfChildren", "TODO");
+        rootNode.put("numberOfAdults", numberOfAdults);
+        rootNode.put("numberOfChildren", numberOfChildren);
 
         return new ResponseEntity<>(mapper.writeValueAsString(rootNode), HttpStatus.OK);
     }
