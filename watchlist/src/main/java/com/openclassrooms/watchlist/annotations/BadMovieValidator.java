@@ -1,6 +1,6 @@
 package com.openclassrooms.watchlist.annotations;
 
-import com.openclassrooms.watchlist.model.WatchlistItem;
+import com.openclassrooms.watchlist.domain.WatchlistItem;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

@@ -1,10 +1,22 @@
 {
   "persons": [
     {
+      "firstName": "Brian",
+      "lastName": "Stelzer",
+      "address": "947 E. Rose Dr",
+      "phone": "841-874-7784"
+    },
+    {
       "firstName": "Peter",
       "lastName": "Duncan",
       "address": "644 Gershwin Cir",
       "phone": "841-874-6512"
+    },
+    {
+      "firstName": "Kendrik",
+      "lastName": "Stelzer",
+      "address": "947 E. Rose Dr",
+      "phone": "841-874-7784"
     },
     {
       "firstName": "Reginold",
@@ -19,24 +31,12 @@
       "phone": "841-874-7462"
     },
     {
-      "firstName": "Brian",
-      "lastName": "Stelzer",
-      "address": "947 E. Rose Dr",
-      "phone": "841-874-7784"
-    },
-    {
       "firstName": "Shawna",
-      "lastName": "Stelzer",
-      "address": "947 E. Rose Dr",
-      "phone": "841-874-7784"
-    },
-    {
-      "firstName": "Kendrik",
       "lastName": "Stelzer",
       "address": "947 E. Rose Dr",
       "phone": "841-874-7784"
     }
   ],
-  "numberOfAdults": "TODO",
-  "numberOfChildren": "TODO"
+  "numberOfAdults": 5,
+  "numberOfChildren": 1
 }

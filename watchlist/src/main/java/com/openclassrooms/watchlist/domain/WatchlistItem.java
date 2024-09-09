@@ -1,4 +1,4 @@
-package com.openclassrooms.watchlist.model;
+package com.openclassrooms.watchlist.domain;
 
 import com.openclassrooms.watchlist.annotations.GoodMovie;
 import com.openclassrooms.watchlist.annotations.BadMovie;
