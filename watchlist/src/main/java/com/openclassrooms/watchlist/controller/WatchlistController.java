@@ -5,6 +5,8 @@ import java.util.Map;
 
 import jakarta.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import com.openclassrooms.watchlist.domain.WatchlistItem;
 import com.openclassrooms.watchlist.exception.DuplicateTitleException;
 import com.openclassrooms.watchlist.service.WatchlistService;
 
+@Slf4j
 @Controller
 public class WatchlistController {
 
@@ -32,6 +35,7 @@ public class WatchlistController {
     @GetMapping("/watchlistItemForm")
     public ModelAndView showWatchlistItemForm(@RequestParam(required = false) Integer id) {
 
+        log.info("GET /watchlistItem called");
         String viewName = "watchlistItemForm";
 
         Map<String,Object> model = new HashMap<String,Object>();
