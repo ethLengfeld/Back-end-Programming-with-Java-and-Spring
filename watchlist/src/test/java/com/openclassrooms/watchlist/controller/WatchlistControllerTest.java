@@ -7,10 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.openclassrooms.watchlist.service.WatchlistService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,6 +22,9 @@ public class WatchlistControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    WatchlistService watchlistService;
 
     @Test
     public void testShowWatchlistItemForm() throws Exception {
@@ -33,7 +38,11 @@ public class WatchlistControllerTest {
 
     @Test
     public void testSubmitWatchlistItemForm() throws Exception {
-        mockMvc.perform(post("/watchlistItemForm"))
+        mockMvc.perform(post("/watchlistItemForm")
+                        .param("title", "Top Gun")
+                        .param("rating", "5.5")
+                        .param("priority", "L")
+                        .param("comment", "That was a decent movie, worth a watch"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/watchlist"));
     }

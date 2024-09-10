@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.openclassrooms.watchlist.domain.WatchlistItem;
+import org.springframework.stereotype.Service;
 
+@Service
 public class WatchlistRepository {
     private List<WatchlistItem> watchlistItems = new ArrayList<WatchlistItem>();
     private static int index = 1;

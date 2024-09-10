@@ -40,6 +40,10 @@ public class WatchlistItem {
         this.comment = comment;
     }
 
+    public WatchlistItem(String title, String rating, String priority, String comment, int i) {
+        new WatchlistItem(title, rating, priority, comment);
+    }
+
     public Integer getId() {
         return this.id;
     }

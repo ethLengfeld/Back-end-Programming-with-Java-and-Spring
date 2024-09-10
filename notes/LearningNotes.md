@@ -110,3 +110,9 @@
   - It requires the installation of a web server, like Tomcat. 
   - It used to be a standard practice, but is less popular than using fat JARs.
 - Using Maven without packaging.
+
+When a Spring Boot web application starts, it scans all classes annotated 
+with  @Service,  @Controller, etc., and then creates an instance of each 
+one of them with all their dependencies fulfilled from other beans. The 
+Spring component that does this process and holds all of these instances 
+in memory is called the Spring container or Spring context.
