@@ -1,4 +1,4 @@
-package org.safetynet.alerts.service;
+package org.safetynet.alerts.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +16,7 @@ import java.util.HashMap;
 
 @Getter
 @Service
-public class DataLoaderService {
-
+public class AlertsRepository {
 
     private Map<String, Person> persons;
     private Map<String, FireStation> fireStations;
@@ -61,7 +60,7 @@ public class DataLoaderService {
      * @param args args to pass
      */
     public static void main(String[] args) {
-        DataLoaderService svc = new DataLoaderService();
+        AlertsRepository svc = new AlertsRepository();
         svc.init();
 //        System.out.println("/------------------PERSONS------------------\\");
 //        for(String currPerson : svc.getPersons().keySet()) {
