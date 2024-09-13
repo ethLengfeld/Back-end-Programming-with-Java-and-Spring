@@ -18,8 +18,10 @@ import java.util.Map;
 @Service
 public class AlertsService {
 
+    private final static int ADULT_AGE = 18;
     private final static ObjectMapper MAPPER = new ObjectMapper();
-    private final AlertsRepository alertsRepository;
+
+    private AlertsRepository alertsRepository;
 
     public AlertsService(AlertsRepository alertsRepository) {
         this.alertsRepository = alertsRepository;
@@ -61,7 +63,7 @@ public class AlertsService {
             personNode.put("phone", person.getPhone());
             arrayNode.add(personNode);
 
-            if(DataValidationUtil.isAdult(medicalRecordMap.get(person.getFirstName()+"-"+person.getLastName()).getBirthdate())) {
+            if(DataValidationUtil.getAgeInYears(medicalRecordMap.get(person.getFirstName()+"-"+person.getLastName()).getBirthdate()) >= ADULT_AGE) {
                 numberOfAdults++;
             } else {
                 numberOfChildren++;
@@ -71,6 +73,32 @@ public class AlertsService {
         rootNode.set("persons", arrayNode);
         rootNode.put("numberOfAdults", numberOfAdults);
         rootNode.put("numberOfChildren", numberOfChildren);
+
+        return MAPPER.writeValueAsString(rootNode);
+    }
+
+    public String createChildrenResponse(List<Person> persons) throws JsonProcessingException {
+        ObjectNode rootNode = MAPPER.createObjectNode();
+
+        ArrayNode childrenArrayNode = MAPPER.createArrayNode();
+        ArrayNode relativeArrayNode = MAPPER.createArrayNode();
+        Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
+        for (Person person : persons) {
+            ObjectNode personNode = MAPPER.createObjectNode();
+            personNode.put("firstName", person.getFirstName());
+            personNode.put("lastName", person.getLastName());
+
+            int age = DataValidationUtil.getAgeInYears(medicalRecordMap.get(person.getFirstName()+"-"+person.getLastName()).getBirthdate());
+            personNode.put("age", age);
+            if(age < ADULT_AGE) {
+                childrenArrayNode.add(personNode);
+            } else {
+                relativeArrayNode.add(personNode);
+            }
+        }
+
+        rootNode.set("children", childrenArrayNode);
+        rootNode.set("relative", relativeArrayNode);
 
         return MAPPER.writeValueAsString(rootNode);
     }

@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 
 public class DataValidationUtil {
 
-    public static boolean isAdult(String dob) {
+    public static int getAgeInYears(String dob) {
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
@@ -15,9 +15,9 @@ public class DataValidationUtil {
             LocalDate todayDate = LocalDate.now();
 
             Period timeBetween = Period.between(birthDate, todayDate);
-            return timeBetween.getYears() >= 18;
+            return timeBetween.getYears();
         } catch (DateTimeParseException e) {
-            return false;
+            return -1;
         }
     }
 }

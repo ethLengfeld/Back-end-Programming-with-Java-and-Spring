@@ -1,20 +1,10 @@
 package org.safetynet.alerts.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.safetynet.alerts.model.FireStation;
-import org.safetynet.alerts.model.MedicalRecord;
 import org.safetynet.alerts.model.Person;
 import org.safetynet.alerts.service.AlertsService;
-import org.safetynet.alerts.utils.DataValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AlertsController {
 
-    @Autowired
     private AlertsService alertsService;
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return new ResponseEntity<>("Hello there, friend.", HttpStatus.I_AM_A_TEAPOT);
+    @Autowired
+    public AlertsController(AlertsService alertsService) {
+        this.alertsService = alertsService;
     }
 
     /**
@@ -40,8 +29,8 @@ public class AlertsController {
      * pieces of information: first name, last name, address, phone number. As well, it should provide a
      * summary of the number of adults in the service area and the number of children (anyone aged 18 or
      * younger).
-     * @param stationNumber
-     * @return
+     * @param stationNumber - integer representing the station number
+     * @return string with first name, last name, address, phone number, number of adults, and number of children
      */
     @GetMapping("/firestation")
     public ResponseEntity<String> getPersonsServicedByStationNumber(@RequestParam Integer stationNumber) throws JsonProcessingException {
@@ -62,14 +51,17 @@ public class AlertsController {
      * @return
      */
     @GetMapping("/childAlert")
-    public ResponseEntity<String> getListOfChildrenFromAddress(@RequestParam String address) {
-        return new ResponseEntity<>("Here is the list of Children based on the Address-" + address, HttpStatus.OK);
+    public ResponseEntity<String> getListOfChildrenFromAddress(@RequestParam String address) throws JsonProcessingException {
+        List<String> listOfAddress = List.of(address);
+        List<Person> servicedPersons = alertsService.getPersonsFromAddresses(listOfAddress);
+        String jsonResponse = alertsService.createChildrenResponse(servicedPersons);
+        return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
 
     /**
      * <a href="http://localhost:8080/phoneAlert?firestation=">...</a>
-     * This URL should return a list of phone numbers of each person within the fire station’s jurisdiction.We’ll
-     * use this to send emergency text messages to specific households.
+     * This URL should return a list of phone numbers of each person within the fire station’s jurisdiction.
+     * We’ll use this to send emergency text messages to specific households.
      * @param stationNumber
      * @return
      */
