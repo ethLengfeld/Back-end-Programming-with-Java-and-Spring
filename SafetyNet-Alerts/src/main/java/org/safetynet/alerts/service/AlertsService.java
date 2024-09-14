@@ -12,6 +12,7 @@ import org.safetynet.alerts.utils.DataValidationUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class AlertsService {
 
     public List<Person> getPersonsFromAddresses(List<String> servicedAddresses) {
         List<Person> servicedPersons = new ArrayList<>();
-        Map<String, Person> personsMap = alertsRepository.getPersons();
+        Map<String, Person> personsMap = this.alertsRepository.getPersons();
         for (String person : personsMap.keySet()) {
             if (servicedAddresses.contains(personsMap.get(person).getAddress())) {
                 servicedPersons.add(personsMap.get(person));
@@ -49,7 +50,7 @@ public class AlertsService {
         return servicedPersons;
     }
 
-    public String createPersonsResponse(List<Person> persons) throws JsonProcessingException {
+    public String createPersonsServicedByStationNumberResponse(List<Person> persons) throws JsonProcessingException {
         ObjectNode rootNode = MAPPER.createObjectNode();
         ArrayNode arrayNode = MAPPER.createArrayNode();
 
@@ -63,7 +64,7 @@ public class AlertsService {
             personNode.put("phone", person.getPhone());
             arrayNode.add(personNode);
 
-            if(DataValidationUtil.getAgeInYears(medicalRecordMap.get(person.getFirstName()+"-"+person.getLastName()).getBirthdate()) >= ADULT_AGE) {
+            if(DataValidationUtil.getAgeInYears(medicalRecordMap.get(person.getFirstName() + "-" + person.getLastName()).getBirthdate()) >= ADULT_AGE) {
                 numberOfAdults++;
             } else {
                 numberOfChildren++;
@@ -77,7 +78,7 @@ public class AlertsService {
         return MAPPER.writeValueAsString(rootNode);
     }
 
-    public String createChildrenResponse(List<Person> persons) throws JsonProcessingException {
+    public String createChildrenFromAddressResponse(List<Person> persons) throws JsonProcessingException {
         ObjectNode rootNode = MAPPER.createObjectNode();
 
         ArrayNode childrenArrayNode = MAPPER.createArrayNode();
@@ -88,7 +89,7 @@ public class AlertsService {
             personNode.put("firstName", person.getFirstName());
             personNode.put("lastName", person.getLastName());
 
-            int age = DataValidationUtil.getAgeInYears(medicalRecordMap.get(person.getFirstName()+"-"+person.getLastName()).getBirthdate());
+            int age = DataValidationUtil.getAgeInYears(medicalRecordMap.get(person.getFirstName() + "-" + person.getLastName()).getBirthdate());
             personNode.put("age", age);
             if(age < ADULT_AGE) {
                 childrenArrayNode.add(personNode);
@@ -99,6 +100,108 @@ public class AlertsService {
 
         rootNode.set("children", childrenArrayNode);
         rootNode.set("relative", relativeArrayNode);
+
+        return MAPPER.writeValueAsString(rootNode);
+    }
+
+    public String createPhoneNumbersForPeopleByStationNumberResponse(List<Person> persons) throws JsonProcessingException {
+        ObjectNode rootNode = MAPPER.createObjectNode();
+
+        ArrayNode phoneArrayNode = MAPPER.createArrayNode();
+        for (Person person : persons) {
+            phoneArrayNode.add(person.getPhone());
+        }
+
+        rootNode.set("phoneNumbers", phoneArrayNode);
+        return MAPPER.writeValueAsString(rootNode);
+    }
+
+    public String createStationNumberAndPeopleByAddressResponse(List<Person> persons) throws JsonProcessingException {
+        ObjectNode rootNode = MAPPER.createObjectNode();
+        ArrayNode arrayNode = MAPPER.createArrayNode();
+
+        Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
+        for (Person person : persons) {
+            ObjectNode personNode = MAPPER.createObjectNode();
+            personNode.put("firstName", person.getFirstName());
+            personNode.put("lastName", person.getLastName());
+            personNode.put("phoneNumber", person.getPhone());
+
+            MedicalRecord medicalRecord = medicalRecordMap.get(person.getFirstName() + "-" + person.getLastName());
+            personNode.put("age", DataValidationUtil.getAgeInYears(medicalRecord.getBirthdate()));
+            personNode.put("medications", Arrays.toString(medicalRecord.getMedications()));
+            personNode.put("allergies", Arrays.toString(medicalRecord.getAllergies()));
+            arrayNode.add(personNode);
+        }
+
+        Map<String, FireStation> stationsMap = this.alertsRepository.getFireStations();
+        rootNode.put("stationNumber", stationsMap.get(persons.get(0).getAddress()).getStation());
+        rootNode.set("persons", arrayNode);
+
+        return MAPPER.writeValueAsString(rootNode);
+    }
+
+    public String createHouseholdsForEachStationNumberResponse(List<String> addresses) throws JsonProcessingException {
+        ObjectNode rootNode = MAPPER.createObjectNode();
+        ArrayNode arrayNode = MAPPER.createArrayNode();
+
+        Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
+        for (String address : addresses) {
+            ObjectNode addressNode = MAPPER.createObjectNode();
+            addressNode.put("address", address);
+            ArrayNode personsArrayNode = MAPPER.createArrayNode();
+            List<Person> persons = this.getPersonsFromAddresses(List.of(address));
+            for (Person person : persons) {
+                ObjectNode personNode = MAPPER.createObjectNode();
+                personNode.put("firstName", person.getFirstName());
+                personNode.put("lastName", person.getLastName());
+                personNode.put("phoneNumber", person.getPhone());
+
+                MedicalRecord medicalRecord = medicalRecordMap.get(person.getFirstName() + "-" + person.getLastName());
+                personNode.put("age", DataValidationUtil.getAgeInYears(medicalRecord.getBirthdate()));
+                personNode.put("medications", Arrays.toString(medicalRecord.getMedications()));
+                personNode.put("allergies", Arrays.toString(medicalRecord.getAllergies()));
+                personsArrayNode.add(personNode);
+            }
+            addressNode.set("persons", personsArrayNode);
+            arrayNode.add(addressNode);
+        }
+        rootNode.set("addresses", arrayNode);
+
+        return MAPPER.writeValueAsString(rootNode);
+    }
+
+    public String createPersonInfoResponse(String firstLastNameKey) throws JsonProcessingException {
+
+        Map<String, Person> personsMap = this.alertsRepository.getPersons();
+        Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
+
+        Person person = personsMap.get(firstLastNameKey);
+        ObjectNode rootNode = MAPPER.createObjectNode();
+        rootNode.put("firstName", person.getFirstName());
+        rootNode.put("lastName", person.getLastName());
+        rootNode.put("address", person.getAddress());
+        rootNode.put("email", person.getAddress());
+
+
+        MedicalRecord medicalRecord = medicalRecordMap.get(firstLastNameKey);
+        rootNode.put("age", DataValidationUtil.getAgeInYears(medicalRecord.getBirthdate()));
+        rootNode.put("medications", Arrays.toString(medicalRecord.getMedications()));
+        rootNode.put("allergies", Arrays.toString(medicalRecord.getAllergies()));
+
+        return MAPPER.writeValueAsString(rootNode);
+    }
+
+    public String createEmailAddressesByCityResponse(String city) throws JsonProcessingException {
+        ObjectNode rootNode = MAPPER.createObjectNode();
+        ArrayNode emailArrayNode = MAPPER.createArrayNode();
+        Map<String, Person> personsMap = this.alertsRepository.getPersons();
+        for (String personKey : personsMap.keySet()) {
+            if (personsMap.get(personKey).getCity().equals(city)) {
+                emailArrayNode.add(personsMap.get(personKey).getEmail());
+            }
+        }
+        rootNode.set("emails", emailArrayNode);
 
         return MAPPER.writeValueAsString(rootNode);
     }
