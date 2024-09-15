@@ -57,9 +57,7 @@ public class AlertsService {
         Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
         int numberOfAdults = 0, numberOfChildren = 0;
         for (Person person : persons) {
-            ObjectNode personNode = MAPPER.createObjectNode();
-            personNode.put("firstName", person.getFirstName());
-            personNode.put("lastName", person.getLastName());
+            ObjectNode personNode = createPersonNode(person);
             personNode.put("address", person.getAddress());
             personNode.put("phone", person.getPhone());
             arrayNode.add(personNode);
@@ -85,9 +83,7 @@ public class AlertsService {
         ArrayNode relativeArrayNode = MAPPER.createArrayNode();
         Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
         for (Person person : persons) {
-            ObjectNode personNode = MAPPER.createObjectNode();
-            personNode.put("firstName", person.getFirstName());
-            personNode.put("lastName", person.getLastName());
+            ObjectNode personNode = createPersonNode(person);
 
             int age = DataValidationUtil.getAgeInYears(medicalRecordMap.get(person.getFirstName() + "-" + person.getLastName()).getBirthdate());
             personNode.put("age", age);
@@ -122,9 +118,7 @@ public class AlertsService {
 
         Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
         for (Person person : persons) {
-            ObjectNode personNode = MAPPER.createObjectNode();
-            personNode.put("firstName", person.getFirstName());
-            personNode.put("lastName", person.getLastName());
+            ObjectNode personNode = createPersonNode(person);
             personNode.put("phoneNumber", person.getPhone());
 
             MedicalRecord medicalRecord = medicalRecordMap.get(person.getFirstName() + "-" + person.getLastName());
@@ -152,9 +146,7 @@ public class AlertsService {
             ArrayNode personsArrayNode = MAPPER.createArrayNode();
             List<Person> persons = this.getPersonsFromAddresses(List.of(address));
             for (Person person : persons) {
-                ObjectNode personNode = MAPPER.createObjectNode();
-                personNode.put("firstName", person.getFirstName());
-                personNode.put("lastName", person.getLastName());
+                ObjectNode personNode = createPersonNode(person);
                 personNode.put("phoneNumber", person.getPhone());
 
                 MedicalRecord medicalRecord = medicalRecordMap.get(person.getFirstName() + "-" + person.getLastName());
@@ -177,9 +169,7 @@ public class AlertsService {
         Map<String, MedicalRecord> medicalRecordMap = this.alertsRepository.getMedicalRecords();
 
         Person person = personsMap.get(firstLastNameKey);
-        ObjectNode rootNode = MAPPER.createObjectNode();
-        rootNode.put("firstName", person.getFirstName());
-        rootNode.put("lastName", person.getLastName());
+        ObjectNode rootNode = createPersonNode(person);
         rootNode.put("address", person.getAddress());
         rootNode.put("email", person.getAddress());
 
@@ -205,4 +195,12 @@ public class AlertsService {
 
         return MAPPER.writeValueAsString(rootNode);
     }
+
+    public ObjectNode createPersonNode(Person person) {
+        ObjectNode personNode = MAPPER.createObjectNode();
+        personNode.put("firstName", person.getFirstName());
+        personNode.put("lastName", person.getLastName());
+        return personNode;
+    }
+
 }
