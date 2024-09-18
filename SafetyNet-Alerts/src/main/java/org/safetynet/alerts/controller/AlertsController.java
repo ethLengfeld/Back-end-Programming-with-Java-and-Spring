@@ -4,16 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
+import org.safetynet.alerts.exception.FireStationException;
+import org.safetynet.alerts.exception.MedicalRecordException;
+import org.safetynet.alerts.model.FireStation;
+import org.safetynet.alerts.model.MedicalRecord;
 import org.safetynet.alerts.model.Person;
 import org.safetynet.alerts.service.AlertsService;
+import org.safetynet.alerts.exception.PersonException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@Slf4j
 public class AlertsController {
 
     private AlertsService alertsService;
@@ -35,11 +41,10 @@ public class AlertsController {
      */
     @GetMapping("/firestation")
     public ResponseEntity<String> getPersonsServicedByStationNumber(@RequestParam Integer stationNumber) throws JsonProcessingException {
-
+        log.info("REQUEST GET /firestation");
         List<String> listOfAddresses = alertsService.getStationAddressesFromStationNumber(stationNumber);
         List<Person> servicedPersons = alertsService.getPersonsFromAddresses(listOfAddresses);
         String jsonResponse = alertsService.createPersonsServicedByStationNumberResponse(servicedPersons);
-
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
 
@@ -53,6 +58,7 @@ public class AlertsController {
      */
     @GetMapping("/childAlert")
     public ResponseEntity<String> getChildrenFromAddress(@RequestParam String address) throws JsonProcessingException {
+        log.info("REQUEST GET /childAlert");
         List<String> listOfAddress = List.of(address);
         List<Person> servicedPersons = alertsService.getPersonsFromAddresses(listOfAddress);
         String jsonResponse = alertsService.createChildrenFromAddressResponse(servicedPersons);
@@ -68,10 +74,10 @@ public class AlertsController {
      */
     @GetMapping("/phoneAlert")
     public ResponseEntity<String> getPhoneNumbersForPeopleByStationNumber(@RequestParam Integer stationNumber) throws JsonProcessingException {
+        log.info("REQUEST GET /phoneAlert");
         List<String> listOfAddresses = alertsService.getStationAddressesFromStationNumber(stationNumber);
         List<Person> servicedPersons = alertsService.getPersonsFromAddresses(listOfAddresses);
         String jsonResponse = alertsService.createPhoneNumbersForPeopleByStationNumberResponse(servicedPersons);
-
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
 
@@ -85,11 +91,10 @@ public class AlertsController {
      */
     @GetMapping("/fire")
     public ResponseEntity<String> getStationNumberAndPeopleByAddress(@RequestParam String address) throws JsonProcessingException {
-        // TODO multiple fire stations returned by address '112 Steppes Pl'
+        log.info("REQUEST GET /fire");
         List<String> listOfAddress = List.of(address);
         List<Person> servicedPersons = alertsService.getPersonsFromAddresses(listOfAddress);
         String jsonResponse = alertsService.createStationNumberAndPeopleByAddressResponse(servicedPersons);
-
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
 
@@ -103,11 +108,13 @@ public class AlertsController {
      */
     @GetMapping("/flood/stations")
     public ResponseEntity<String> getHouseholdsForEachStationNumber(@RequestParam Integer[] stationNumbers) throws JsonProcessingException {
+        log.info("REQUEST GET /flood/stations");
         List<String> addresses = new ArrayList<>();
         for (Integer stationNumber: stationNumbers) {
             addresses.addAll(alertsService.getStationAddressesFromStationNumber(stationNumber));
         }
         String jsonResponse = alertsService.createHouseholdsForEachStationNumberResponse(addresses);
+
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
 
@@ -121,6 +128,7 @@ public class AlertsController {
      */
     @GetMapping("/personInfo")
     public ResponseEntity<String> getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) throws JsonProcessingException {
+        log.info("REQUEST GET /personInfo");
         String jsonResponse = this.alertsService.createPersonInfoResponse(firstName + "-" + lastName);
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
@@ -133,7 +141,144 @@ public class AlertsController {
      */
     @GetMapping("/communityEmail")
     public ResponseEntity<String> getEmailAddressesByCity(@RequestParam String city) throws JsonProcessingException {
+        log.info("REQUEST GET /communityEmail");
         String jsonResponse = this.alertsService.createEmailAddressesByCityResponse(city);
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/person")
+    public ResponseEntity<String> addNewPerson(@RequestParam String firstName,
+                                               @RequestParam String lastName,
+                                               @RequestParam String address,
+                                               @RequestParam String city,
+                                               @RequestParam String zip,
+                                               @RequestParam String phone,
+                                               @RequestParam String email) {
+
+        log.info("REQUEST POST /person");
+        Person person = new Person(firstName, lastName, address, city, zip, phone, email);
+        try {
+            this.alertsService.addPerson(person);
+        } catch (PersonException e) {
+            log.error("FAILURE ADDING PERSON", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @PutMapping("/person")
+    public ResponseEntity<String> updateExistingPerson(@RequestParam String firstName,
+                                                       @RequestParam String lastName,
+                                                       @RequestParam String address,
+                                                       @RequestParam String city,
+                                                       @RequestParam String zip,
+                                                       @RequestParam String phone,
+                                                       @RequestParam String email) {
+        log.info("REQUEST PUT /person");
+        Person person = new Person(firstName, lastName, address, city, zip, phone, email);
+        try {
+            this.alertsService.updateExistingPerson(person);
+        } catch (PersonException e) {
+            log.error("FAILURE UPDATING PERSON", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/person")
+    public ResponseEntity<String> deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+        log.info("REQUEST DELETE /person");
+        try {
+            this.alertsService.deletePerson(firstName, lastName);
+        } catch (PersonException e) {
+            log.error("FAILURE DELETING PERSON", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @PostMapping("/firestation")
+    public ResponseEntity<String> addFirestation(@RequestParam String address, @RequestParam int station) {
+        log.info("REQUEST POST /firestation");
+        FireStation fireStation = new FireStation(address, station);
+        try {
+            this.alertsService.addFirestation(fireStation);
+        } catch (FireStationException e) {
+            log.error("FAILURE ADDING FIRE STATION", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @PutMapping("/firestation")
+    public ResponseEntity<String> updateExistingFirestation(@RequestParam String address, @RequestParam int station) {
+        log.info("REQUEST PUT /firestation");
+        FireStation fireStation = new FireStation(address, station);
+        try {
+            this.alertsService.updateExistingFirestation(fireStation);
+        } catch (FireStationException e) {
+            log.error("FAILURE UPDATING FIRE STATION", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/firestation")
+    public ResponseEntity<String> deleteFirestation(@RequestParam String address) {
+        log.info("REQUEST DELETE /firestation");
+        try {
+            this.alertsService.deleteFirestation(address);
+        } catch (FireStationException e) {
+            log.error("FAILURE DELETING FIRE STATION", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @PostMapping("/medicalRecord")
+    public ResponseEntity<String> addMedicalRecord(@RequestParam String firstName,
+                                                   @RequestParam String lastName,
+                                                   @RequestParam String birthdate,
+                                                   @RequestParam String[] medications,
+                                                   @RequestParam String[] allergies) {
+        log.info("REQUEST POST /medicalRecord");
+        MedicalRecord medicalRecord = new MedicalRecord(firstName, lastName, birthdate, medications, allergies);
+        try {
+            this.alertsService.addMedicalRecord(medicalRecord);
+        } catch (MedicalRecordException e) {
+            log.error("FAILURE ADDING MEDICAL RECORD", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @PutMapping("/medicalRecord")
+    public ResponseEntity<String> updateExistingMedicalRecord(@RequestParam String firstName,
+                                                              @RequestParam String lastName,
+                                                              @RequestParam String birthdate,
+                                                              @RequestParam String[] medications,
+                                                              @RequestParam String[] allergies) {
+        log.info("REQUEST PUT /medicalRecord");
+        MedicalRecord medicalRecord = new MedicalRecord(firstName, lastName, birthdate, medications, allergies);
+        try {
+            this.alertsService.updateExistingMedicalRecord(medicalRecord);
+        } catch (MedicalRecordException e) {
+            log.error("FAILURE UPDATING MEDICAL RECORD", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/medicalRecord")
+    public ResponseEntity<String> deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) {
+        log.info("REQUEST DELETE /medicalRecord");
+        try {
+            this.alertsService.deleteMedicalRecord(firstName, lastName);
+        } catch (MedicalRecordException e) {
+            log.error("FAILURE DELETING MEDICAL RECORD", e);
+            return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
 }

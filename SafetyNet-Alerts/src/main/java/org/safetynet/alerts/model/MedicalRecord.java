@@ -25,4 +25,16 @@ public class MedicalRecord {
     private String birthdate;
     private String[] medications;
     private String[] allergies;
+
+    public MedicalRecord() {
+        //default constructor
+    }
+
+    public MedicalRecord(String firstName, String lastName, String birthdate, String[] medications, String[] allergies) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
 }

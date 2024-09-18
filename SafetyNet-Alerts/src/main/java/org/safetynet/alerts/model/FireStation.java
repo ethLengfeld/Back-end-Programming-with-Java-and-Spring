@@ -14,4 +14,13 @@ public class FireStation {
      */
     private String address;
     private int station;
+
+    public FireStation() {
+        //default constructor
+    }
+
+    public FireStation(String address, int station) {
+        this.address = address;
+        this.station = station;
+    }
 }

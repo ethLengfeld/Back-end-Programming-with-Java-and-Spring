@@ -5,7 +5,11 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class DataValidationUtil {
+public class JsonDataUtil {
+
+    public static String createPersonMapKey(String firstName, String lastName) {
+        return firstName + "-" + lastName;
+    }
 
     public static int getAgeInYears(String dob) {
         try {
