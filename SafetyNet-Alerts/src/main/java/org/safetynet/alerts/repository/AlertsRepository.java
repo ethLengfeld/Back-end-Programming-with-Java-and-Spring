@@ -8,6 +8,7 @@ import org.safetynet.alerts.model.FireStation;
 import org.safetynet.alerts.model.MedicalRecord;
 import org.safetynet.alerts.model.Person;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,9 @@ import java.util.HashMap;
 @Getter
 @Service
 public class AlertsRepository {
+
+    @Value("${json.file.path}")
+    private String jsonFilePath;
 
     private Map<String, Person> persons;
     private Map<String, FireStation> fireStations;
@@ -32,7 +36,7 @@ public class AlertsRepository {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode;
         try {
-            rootNode = objectMapper.readTree(new File("SafetyNet-Alerts/src/main/resources/data_file.json"));
+            rootNode = objectMapper.readTree(new File(jsonFilePath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,27 +58,5 @@ public class AlertsRepository {
             medicalRecords.put(record.getFirstName()+"-"+record.getLastName(), record);
         }
     }
-
-    /**
-     * Test DataLoaderService
-     * @param args args to pass
-     */
-    public static void main(String[] args) {
-        AlertsRepository svc = new AlertsRepository();
-        svc.init();
-//        System.out.println("/------------------PERSONS------------------\\");
-//        for(String currPerson : svc.getPersons().keySet()) {
-//            System.out.println(currPerson.getFirstName() + " " + currPerson.getLastName());
-//        }
-//        System.out.println("/------------------FIRE STATIONS------------------\\");
-//        for(FireStation currStation : svc.getFireStations()) {
-//            System.out.println(currStation.getStation() + " " + currStation.getAddress());
-//        }
-//        System.out.println("/------------------MEDICAL RECORDS------------------\\");
-//        for(MedicalRecord currRecord : svc.getMedicalRecords()) {
-//            System.out.println(currRecord.getFirstName() + " " + currRecord.getLastName() + " " + currRecord.getBirthdate());
-//        }
-    }
-
 
 }
