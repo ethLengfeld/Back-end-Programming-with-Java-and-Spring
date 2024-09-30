@@ -1,5 +1,6 @@
 package org.safetynet.alerts.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.safetynet.alerts.model.FireStation;
@@ -9,6 +10,7 @@ import org.safetynet.alerts.repository.AlertsRepository;
 import org.safetynet.alerts.utils.JsonDataUtil;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,27 @@ public class AlertsServiceTest {
         assertEquals(0, persons.size());
     }
 
+    @Test
+    public void testCreatePersonsServicedByStationNumberResponse() throws JsonProcessingException {
+        List<Person> persons = new ArrayList<>();
+        persons.add(personsMap.get("Hank-Hill"));
+        persons.add(personsMap.get("Bobby-Hill"));
+        String response = alertsService.createPersonsServicedByStationNumberResponse(persons);
+        assertEquals("{\"persons\":[{\"firstName\":\"Hank\",\"lastName\":\"Hill\"," +
+                "\"address\":\"123 Rainy St\",\"phone\":\"312-333-6789\"}," +
+                "{\"firstName\":\"Bobby\",\"lastName\":\"Hill\",\"address\":\"123 Rainy St\"," +
+                "\"phone\":\"312-333-6789\"}],\"numberOfAdults\":1,\"numberOfChildren\":1}", response);
+    }
+
+    @Test
+    public void testCreateChildrenFromAddressResponse() throws JsonProcessingException {
+        List<Person> persons = new ArrayList<>();
+        persons.add(personsMap.get("Hank-Hill"));
+        persons.add(personsMap.get("Bobby-Hill"));
+        String response = alertsService.createChildrenFromAddressResponse(persons);
+        assertEquals("{\"children\":[{\"firstName\":\"Bobby\",\"lastName\":\"Hill\"," +
+        "\"age\":6}],\"relative\":[{\"firstName\":\"Hank\",\"lastName\":\"Hill\",\"age\":26}]}", response);
+    }
 
     private static void populateMapsWithTestData() {
         personsMap = new HashMap<>();
@@ -76,7 +99,7 @@ public class AlertsServiceTest {
         MedicalRecord childMedicalRecord = new MedicalRecord(childFirstName, childLastName,
                 "01/26/2018", new String[]{"aznol:350mg", "hydrapermazol:100mg"},
                 new String[]{"nillacilan"});
-        medicalRecordsMap.put(JsonDataUtil.createPersonMapKey(adultFirstName, adultFirstName), adultMedicalRecord);
-        medicalRecordsMap.put(JsonDataUtil.createPersonMapKey(childFirstName, childFirstName), childMedicalRecord);
+        medicalRecordsMap.put(JsonDataUtil.createPersonMapKey(adultFirstName, adultLastName), adultMedicalRecord);
+        medicalRecordsMap.put(JsonDataUtil.createPersonMapKey(childFirstName, childLastName), childMedicalRecord);
     }
 }
