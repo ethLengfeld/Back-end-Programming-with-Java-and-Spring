@@ -166,13 +166,10 @@ public class AlertsService {
     }
 
     public String createPersonInfoResponse(String firstLastNameKey) throws JsonProcessingException {
-
-
         Person person = this.personsMap.get(firstLastNameKey);
         ObjectNode rootNode = createPersonNode(person);
         rootNode.put("address", person.getAddress());
         rootNode.put("email", person.getAddress());
-
 
         MedicalRecord medicalRecord = this.medicalRecordsMap.get(firstLastNameKey);
         rootNode.put("age", JsonDataUtil.getAgeInYears(medicalRecord.getBirthdate()));
@@ -185,10 +182,9 @@ public class AlertsService {
     public String createEmailAddressesByCityResponse(String city) throws JsonProcessingException {
         ObjectNode rootNode = MAPPER.createObjectNode();
         ArrayNode emailArrayNode = MAPPER.createArrayNode();
-        Map<String, Person> personsMap = this.alertsRepository.getPersons();
-        for (String personKey : personsMap.keySet()) {
-            if (personsMap.get(personKey).getCity().equals(city)) {
-                emailArrayNode.add(personsMap.get(personKey).getEmail());
+        for (String personKey : this.personsMap.keySet()) {
+            if (this.personsMap.get(personKey).getCity().equals(city)) {
+                emailArrayNode.add(this.personsMap.get(personKey).getEmail());
             }
         }
         rootNode.set("emails", emailArrayNode);
