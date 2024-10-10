@@ -28,13 +28,11 @@ public class AlertsService {
     private final Map<String, Person> personsMap;
     private final Map<String, FireStation> fireStationsMap;
     private final Map<String, MedicalRecord> medicalRecordsMap;
-    private final AlertsRepository alertsRepository;
 
     public AlertsService(AlertsRepository alertsRepository) {
-        this.alertsRepository = alertsRepository;
-        this.personsMap = this.alertsRepository.getPersons();
-        this.fireStationsMap = this.alertsRepository.getFireStations();
-        this.medicalRecordsMap = this.alertsRepository.getMedicalRecords();
+        this.personsMap = alertsRepository.getPersons();
+        this.fireStationsMap = alertsRepository.getFireStations();
+        this.medicalRecordsMap = alertsRepository.getMedicalRecords();
     }
 
     public List<String> getStationAddressesFromStationNumber(int stationNumber) {
