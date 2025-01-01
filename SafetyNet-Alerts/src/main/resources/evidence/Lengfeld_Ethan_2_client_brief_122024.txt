@@ -1,0 +1,5 @@
+Implemented required REST endpoints following MVC design pattern (minus view).
+
+data_file.json contains all info for people, fire stations, and medical records.
+On application start-up, data is loaded into three maps for each data type (people, fire stations, medical records)
+Map values are retrieved and updated based on purpose of each endpoint.
