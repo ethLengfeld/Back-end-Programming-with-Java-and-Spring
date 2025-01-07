@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+    <head>
+        <meta charset="UTF-8">
+        <title>Mediscreen</title>
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+    </head>
+    <body>
+        <header>
+            <h1>Mediscreen</h1>
+        </header>
+
+        <section>
+            <p th:text="'Hello, ' + ${name} + '! Welcome to Mediscreen.'"></p>
+            <h2>List of Medications</h2>
+            <ul>
+                <li th:each="medication : ${medications}" th:text="${medication}">Medication</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 Mediscreen</p>
+        </footer>
+    </body>
+</html>
