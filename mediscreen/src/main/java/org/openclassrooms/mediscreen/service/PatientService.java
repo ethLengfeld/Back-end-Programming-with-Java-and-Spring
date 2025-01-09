@@ -1,23 +1,17 @@
 package org.openclassrooms.mediscreen.service;
 
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.openclassrooms.mediscreen.model.Patient;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Component
+@Service
+@Slf4j
 public class PatientService {
 
-    @Getter
-    private List<Patient> patientList;
-
     public PatientService() {
-        patientList = new ArrayList<>();
     }
 
     public void addPatient(Patient patient) {
-        patientList.add(patient);
+        log.info("ADDING NEW PATIENT TO DATABASE");
     }
 }
