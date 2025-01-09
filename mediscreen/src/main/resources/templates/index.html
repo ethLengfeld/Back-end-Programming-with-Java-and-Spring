@@ -11,16 +11,35 @@
         </header>
 
         <section>
-            <p th:text="'Hello, ' + ${name} + '! Welcome to Mediscreen.'"></p>
-            <h2>List of Medications</h2>
-            <ul>
-                <!-- loop through patients -->
-                <li th:each="medication : ${medications}" th:text="${medication}">Medication</li>
-            </ul>
+            <p>Welcome to Mediscreen.</p>
+            <h2>List of Patients</h2>
+            <table border="1">
+                <thead>
+                <tr>
+                    <th>Family Name</th>
+                    <th>Given Name</th>
+                    <th>Date of Birth</th>
+                    <th>Sex</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Iterate through the list of patients -->
+                <tr th:each="patient : ${patients}">
+                    <td th:text="${patient.family}">family name</td>
+                    <td th:text="${patient.given}">given name</td>
+                    <td th:text="${patient.dob}">date of birth</td>
+                    <td th:text="${patient.sex}">sex</td>
+                    <td th:text="${patient.address}">address</td>
+                    <td th:text="${patient.phone}">phone number</td>
+                </tr>
+                </tbody>
+            </table>
 
             <br>
             <form th:action="@{/patient}" method="get">
-                <button type="submit">Go to Form</button>
+                <button type="submit">Add New Patient</button>
             </form>
         </section>
 

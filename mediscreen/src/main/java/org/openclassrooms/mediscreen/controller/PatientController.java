@@ -20,10 +20,7 @@ public class PatientController {
 
     @GetMapping("/")
     public String home(Model model) {
-        //TODO switch to patients
-        model.addAttribute("name", "John Doe");
-        model.addAttribute("medications",
-                List.of("Aspirin", "Saline Spray", "Cough Syrup"));
+        model.addAttribute("patients", patientService.getPatientList());
         return "index";
     }
 
@@ -46,6 +43,6 @@ public class PatientController {
             address - String
             phone - String
          */
-        return "index";
+        return "redirect:/";
     }
 }
