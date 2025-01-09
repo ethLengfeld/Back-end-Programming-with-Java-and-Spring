@@ -14,8 +14,14 @@
             <p th:text="'Hello, ' + ${name} + '! Welcome to Mediscreen.'"></p>
             <h2>List of Medications</h2>
             <ul>
+                <!-- loop through patients -->
                 <li th:each="medication : ${medications}" th:text="${medication}">Medication</li>
             </ul>
+
+            <br>
+            <form th:action="@{/patient}" method="get">
+                <button type="submit">Go to Form</button>
+            </form>
         </section>
 
         <footer>
