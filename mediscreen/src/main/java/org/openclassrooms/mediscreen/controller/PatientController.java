@@ -22,6 +22,7 @@ public class PatientController {
 
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
+        //TODO populate with call to db
         patientList = new ArrayList<>();
     }
 
