@@ -23,7 +23,7 @@ public class PatientController {
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
         //TODO populate with call to db
-        patientList = new ArrayList<>();
+        patientList = patientService.readPatients();
     }
 
     @GetMapping("/")
@@ -44,8 +44,8 @@ public class PatientController {
     @PostMapping("/patient/add")
     public String addPatient(Patient patient, Model model) {
         log.info("SUBMITTED PATIENT");
-        patientList.add(patient);
         patientService.addPatient(patient);
+        patientList = patientService.readPatients();
         return "redirect:/";
     }
 }
