@@ -6,7 +6,9 @@ import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -43,8 +45,24 @@ public class PatientController {
 
     @PostMapping("/patient/add")
     public String addPatient(Patient patient, Model model) {
-        log.info("SUBMITTED PATIENT");
+        log.info("ADDING PATIENT");
         patientService.addPatient(patient);
+        patientList = patientService.readPatients();
+        return "redirect:/";
+    }
+
+    @PostMapping("/patient/edit")
+    public String editPatient(Patient patient, Model model) {
+        log.info("EDITING PATIENT");
+        patientService.addPatient(patient);
+        patientList = patientService.readPatients();
+        return "redirect:/";
+    }
+
+    @PostMapping("/patient/delete/{id}")
+    public String deletePatient(@PathVariable Long id) {
+        log.info("DELETING PATIENT");
+        patientService.deletePatient(patientService.readPatient(id));
         patientList = patientService.readPatients();
         return "redirect:/";
     }

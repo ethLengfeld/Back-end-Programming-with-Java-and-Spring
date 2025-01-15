@@ -11,7 +11,7 @@ import java.util.List;
 @Slf4j
 public class PatientService {
 
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
@@ -22,8 +22,16 @@ public class PatientService {
         patientRepository.save(patient);
     }
 
+    public Patient readPatient(Long id) {
+        return patientRepository.findById(id).get();
+    }
+
     public List<Patient> readPatients() {
         log.info("READING ALL PATIENTS FROM DATABASE");
         return patientRepository.findAll();
+    }
+
+    public void deletePatient(Patient patient) {
+        patientRepository.delete(patient);
     }
 }

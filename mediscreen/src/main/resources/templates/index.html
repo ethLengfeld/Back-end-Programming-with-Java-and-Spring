@@ -33,6 +33,13 @@
                     <td th:text="${patient.sex}">sex</td>
                     <td th:text="${patient.address}">address</td>
                     <td th:text="${patient.phone}">phone number</td>
+                    <td th:text="${patient.id}">id</td>
+                    <td>
+                        <button>Edit</button>
+                        <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
                 </tr>
                 </tbody>
             </table>
