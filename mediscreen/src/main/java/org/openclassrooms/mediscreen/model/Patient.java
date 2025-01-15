@@ -23,6 +23,7 @@ public class Patient {
     private char sex;
     @Column(name = "address", nullable = false)
     private String address;
+    @PhoneNumber
     @Column(name = "phone", nullable = false)
     private String phone;
 
