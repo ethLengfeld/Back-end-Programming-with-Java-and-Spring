@@ -3,7 +3,8 @@
 
 ## TODO
 - add unit testing
-- add edit/delete buttons to patients
+- add validation for phone numbers/emails
+- add edit functionality
 
 ## Docker
 - build image with command
