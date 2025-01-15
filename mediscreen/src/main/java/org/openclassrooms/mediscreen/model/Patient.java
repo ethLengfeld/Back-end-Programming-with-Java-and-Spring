@@ -1,5 +1,6 @@
 package org.openclassrooms.mediscreen.model;
 
+import org.openclassrooms.mediscreen.annotations.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
