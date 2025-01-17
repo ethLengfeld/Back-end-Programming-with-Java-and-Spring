@@ -1,17 +1,15 @@
 package org.openclassrooms.mediscreen.controller;
 
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,7 +22,6 @@ public class PatientController {
 
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
-        //TODO populate with call to db
         patientList = patientService.readPatients();
     }
 
@@ -36,25 +33,28 @@ public class PatientController {
     }
 
     @GetMapping("/patient")
-    public String showPatientForm(Model model) {
-        log.info("AT PATIENT FORM PAGE");
-        //TODO future case check if patient already exists?
-        model.addAttribute("patient", new Patient());
+    public String showPatientForm(@RequestParam(required = false) Long id, Model model) {
+        log.info("PATIENT FORM PAGE");
+        log.info("id: {}", id);
+        Patient patient = patientService.readPatient(id);
+
+        if (patient == null) {
+            model.addAttribute("patient", new Patient());
+        }
+        else {
+            model.addAttribute("patient", patient);
+        }
+
         return "patientForm";
     }
 
     @PostMapping("/patient/add")
-    public String addPatient(Patient patient, Model model) {
-        log.info("ADDING PATIENT");
-        patientService.addPatient(patient);
-        patientList = patientService.readPatients();
-        return "redirect:/";
-    }
-
-    @PostMapping("/patient/edit")
-    public String editPatient(Patient patient, Model model) {
-        log.info("EDITING PATIENT");
-        patientService.addPatient(patient);
+    public String submitPatientForm(@Valid Patient patient, BindingResult bindingResult) {
+        log.info("SUBMITTING PATIENT");
+        if (bindingResult.hasErrors()) {
+            return "patientForm";
+        }
+        patientService.addOrUpdatePatient(patient);
         patientList = patientService.readPatients();
         return "redirect:/";
     }

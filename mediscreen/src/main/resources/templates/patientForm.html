@@ -2,38 +2,58 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1, shrink-to-fit = no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <title>Mediscreen - Patient</title>
 </head>
 <body>
-    <h1>Add New Patient</h1>
+<div class="container">
+    <div class="row">
+        <h1>Add New Patient</h1>
+    </div>
+
     <form th:action="@{/patient/add}" th:object="${patient}" method="post">
-        <label for="family">Family Name (Last Name):</label>
-        <input type="text" id="family" th:field="*{family}" placeholder="Enter your family name" required />
-        <br/>
-
-        <label for="given">Given Name (First Name):</label>
-        <input type="text" id="given" th:field="*{given}" placeholder="Enter your given name" required />
-        <br/>
-
-        <label for="dob">Date of Birth (YYYY-MM-dd):</label>
-        <input type="date" id="dob" th:field="*{dob}" placeholder="Enter your date of birth" required />
-        <br/>
-
-        <label>Sex:</label>
-        <input type="radio" id="male" th:field="*{sex}" value='M' required />
-        <label for="male">Male</label>
-        <input type="radio" id="female" th:field="*{sex}" value='F' />
-        <label for="female">Female</label>
-        <br/>
-
-        <label for="address">Address:</label>
-        <input type="text" id="address" th:field="*{address}" placeholder="Enter your address" required />
-        <br/>
-
-        <label for="phone">Phone Number:</label>
-        <input type="text" id="phone" th:field="*{phone}" placeholder="Enter your phone number" required />
-        <br/>
-        <button type="submit">Submit</button>
+        <!-- family -->
+        <div class="form-group row">
+            <label for="family">Family Name (Last Name):</label>
+            <input type="text" id="family" th:field="*{family}" placeholder="Enter your family name" required/>
+        </div>
+        <!-- given -->
+        <div class="form-group row">
+            <label for="given">Given Name (First Name):</label>
+            <input type="text" id="given" th:field="*{given}" placeholder="Enter your given name" required/>
+        </div>
+        <!-- dob -->
+        <div class="form-group row">
+            <label for="dob">Date of Birth (YYYY-MM-dd):</label>
+            <input type="date" id="dob" th:field="*{dob}" placeholder="Enter your date of birth" required/>
+        </div>
+        <!-- Sex -->
+        <div class="form-group row">
+            <label>Sex:</label>
+            <input type="radio" id="male" th:field="*{sex}" value='M' required/>
+            <label for="male">Male</label>
+            <input type="radio" id="female" th:field="*{sex}" value='F'/>
+            <label for="female">Female</label>
+        </div>
+        <!-- address -->
+        <div class="form-group row">
+            <label for="address">Address:</label>
+            <input type="text" id="address" th:field="*{address}" placeholder="Enter your address" required/>
+        </div>
+        <!-- phone -->
+        <div class="form-group row">
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" th:field="*{phone}" placeholder="Enter your phone number" required/>
+            <div class="col-sm-4">
+                <span class="text-danger" th:errors="*{phone}"> </span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <input type="hidden" th:field="*{id}">
+            <button type="submit">Submit</button>
+        </div>
     </form>
+</div>
 </body>
 </html>
