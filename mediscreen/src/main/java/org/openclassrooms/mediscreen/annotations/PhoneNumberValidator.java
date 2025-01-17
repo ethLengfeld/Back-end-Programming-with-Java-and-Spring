@@ -1,13 +1,17 @@
 package org.openclassrooms.mediscreen.annotations;
 
-import org.openclassrooms.mediscreen.model.Patient;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import lombok.extern.slf4j.Slf4j;
 
-public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, Patient>{
+@Slf4j
+public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
+
+    private static final String REGEX = "\\d{3}-\\d{3}-\\d{4}";
 
     @Override
-    public boolean isValid(Patient patient, ConstraintValidatorContext context) {
-
-        return patient.getPhone().length() > 0;
+    public boolean isValid(String phone, ConstraintValidatorContext context) {
+        return phone.matches(REGEX);
     }
 
 }

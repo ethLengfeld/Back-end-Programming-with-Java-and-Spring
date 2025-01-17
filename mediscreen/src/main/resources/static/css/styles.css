@@ -21,3 +21,15 @@ footer {
     padding: 10px 0;
     margin-top: 20px;
 }
+
+.table-with-border {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-with-border th,
+.table-with-border td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}

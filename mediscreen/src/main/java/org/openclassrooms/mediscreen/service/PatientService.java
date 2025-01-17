@@ -17,21 +17,26 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    public void addPatient(Patient patient) {
-        log.info("ADDING NEW PATIENT TO DATABASE");
+    public void addOrUpdatePatient(Patient patient) {
+        log.info("SAVING PATIENT");
         patientRepository.save(patient);
     }
 
     public Patient readPatient(Long id) {
+        log.info("READING PATIENT WITH id:::{}", id);
+        if (id == null) {
+            return null;
+        }
         return patientRepository.findById(id).get();
     }
 
     public List<Patient> readPatients() {
-        log.info("READING ALL PATIENTS FROM DATABASE");
+        log.info("READING ALL PATIENTS");
         return patientRepository.findAll();
     }
 
     public void deletePatient(Patient patient) {
+        log.info("DELETING PATIENT");
         patientRepository.delete(patient);
     }
 }
