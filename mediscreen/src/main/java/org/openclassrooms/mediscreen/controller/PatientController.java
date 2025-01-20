@@ -3,6 +3,7 @@ package org.openclassrooms.mediscreen.controller;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.openclassrooms.mediscreen.model.Note;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.service.PatientService;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @Slf4j
@@ -22,14 +24,7 @@ public class PatientController {
 
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
-        patientList = patientService.readPatients();
-    }
-
-    @GetMapping("/")
-    public String home(Model model) {
-        log.info("AT INDEX PAGE");
-        model.addAttribute("patients", patientList);
-        return "index";
+        this.patientList = patientService.readPatients();
     }
 
     @GetMapping("/patient")
@@ -38,12 +33,7 @@ public class PatientController {
         log.info("id: {}", id);
         Patient patient = patientService.readPatient(id);
 
-        if (patient == null) {
-            model.addAttribute("patient", new Patient());
-        }
-        else {
-            model.addAttribute("patient", patient);
-        }
+        model.addAttribute("patient", Objects.requireNonNullElseGet(patient, Patient::new));
 
         return "patientForm";
     }
@@ -64,6 +54,9 @@ public class PatientController {
         log.info("DELETING PATIENT");
         patientService.deletePatient(patientService.readPatient(id));
         patientList = patientService.readPatients();
+
+        //TODO delete notes
+
         return "redirect:/";
     }
 }
