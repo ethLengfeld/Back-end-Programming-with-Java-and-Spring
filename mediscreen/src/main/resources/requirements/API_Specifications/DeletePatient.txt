@@ -1,0 +1,23 @@
+Mediscreen
+REST API Specification
+
+Name: Delete Patient
+
+URL: /patient/delete
+
+Method: post
+
+URL Parameters: Required: event=[JSON]
+
+Data Parameters: event={"id":[long]}
+
+Response (Success): Code: 200
+Content: “OK”
+
+Response (Failure): Code: 400
+Content: “Malformed Request”
+
+Sample Call:
+curl -d id=1 -X POST http://localhost:8081/patient/delete
+
+Notes: None

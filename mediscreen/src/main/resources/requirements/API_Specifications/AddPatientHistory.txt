@@ -1,0 +1,23 @@
+Mediscreen
+REST API Specification
+
+Name: Add Patient History
+
+URL: /patHistory/add
+
+Method: post
+
+URL Parameters: Required: event=[JSON]
+
+Data Parameters: event={"patId":[long], "note":[string]}
+
+Response (Success): Code: 200
+Content: “OK”
+
+Response (Failure): Code: 400
+Content: “Malformed Request”
+
+Sample Call:
+curl -d “id=1&note=Here is a doctor not" -X POST http://localhost:8081/patHistory/add
+
+Notes: Note will save any special formatting

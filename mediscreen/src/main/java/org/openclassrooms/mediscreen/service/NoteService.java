@@ -2,7 +2,6 @@ package org.openclassrooms.mediscreen.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openclassrooms.mediscreen.model.Note;
-import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class NoteService {
+public class NoteService implements CrudService<Note> {
 
     private NoteRepository noteRepository;
 
@@ -18,12 +17,14 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public void addOrUpdateNote(Note note) {
+    @Override
+    public void addOrUpdate(Note note) {
         log.info("SAVING NOTE");
         noteRepository.save(note);
     }
 
-    public Note readNote(Long id) {
+    @Override
+    public Note read(Long id) {
         log.info("READING NOTE WITH id:::{}", id);
         if (id == null) {
             return null;
@@ -31,8 +32,14 @@ public class NoteService {
         return noteRepository.findById(id).get();
     }
 
-    public List<Note> readNotes() {
+    @Override
+    public List<Note> readAll() {
         log.info("READING ALL NOTES");
         return noteRepository.findAll();
+    }
+
+    @Override
+    public void delete(Note note) {
+        // noop
     }
 }

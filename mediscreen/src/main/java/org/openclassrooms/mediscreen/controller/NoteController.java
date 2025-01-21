@@ -31,7 +31,7 @@ public class NoteController {
 
         Note note;
         try {
-            note = noteService.readNote(id);
+            note = noteService.read(id);
         } catch (NoSuchElementException e) {
             log.error("Error retrieving notes for patient id");
             note = new Note(id);
@@ -51,7 +51,7 @@ public class NoteController {
         Note newNote;
         List<String> doctorNotes;
         try {
-            newNote = noteService.readNote(patId);
+            newNote = noteService.read(patId);
             // TODO throw exception if newNote is null
             doctorNotes = newNote.getDoctorNotes();
         } catch (NoSuchElementException e) {
@@ -63,7 +63,7 @@ public class NoteController {
         doctorNotes.add(note);
         newNote.setDoctorNotes(doctorNotes);
 
-        noteService.addOrUpdateNote(newNote);
+        noteService.addOrUpdate(newNote);
         return "redirect:/";
     }
 

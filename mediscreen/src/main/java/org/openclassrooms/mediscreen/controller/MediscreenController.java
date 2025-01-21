@@ -1,7 +1,6 @@
 package org.openclassrooms.mediscreen.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.openclassrooms.mediscreen.model.Note;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.service.NoteService;
 import org.openclassrooms.mediscreen.service.PatientService;
@@ -18,21 +17,16 @@ public class MediscreenController {
     private final PatientService patientService;
     private List<Patient> patientList;
 
-    private final NoteService noteService;
-//    private List<Note> noteList;
 
-    public MediscreenController(PatientService patientService, NoteService noteService) {
+    public MediscreenController(PatientService patientService) {
         this.patientService = patientService;
-        this.patientList = this.patientService.readPatients();
-
-        this.noteService = noteService;
-//        this.noteList = this.noteService.readNotes();
+        this.patientList = this.patientService.readAll();
     }
 
     @GetMapping("/")
     public String home(Model model) {
         log.info("AT INDEX PAGE");
-        patientList = patientService.readPatients();
+        patientList = patientService.readAll();
         model.addAttribute("patients", patientList);
         return "index";
     }

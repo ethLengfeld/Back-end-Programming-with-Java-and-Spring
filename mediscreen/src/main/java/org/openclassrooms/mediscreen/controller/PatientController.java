@@ -3,7 +3,6 @@ package org.openclassrooms.mediscreen.controller;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.openclassrooms.mediscreen.model.Note;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.service.PatientService;
 import org.springframework.stereotype.Controller;
@@ -18,20 +17,21 @@ import java.util.Objects;
 @Slf4j
 public class PatientController {
 
+    private static final String HOME = "redirect:/";
     private final PatientService patientService;
     @Getter
     private List<Patient> patientList;
 
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
-        this.patientList = patientService.readPatients();
+        this.patientList = patientService.readAll();
     }
 
     @GetMapping("/patient")
     public String showPatientForm(@RequestParam(required = false) Long id, Model model) {
         log.info("PATIENT FORM PAGE");
         log.info("id: {}", id);
-        Patient patient = patientService.readPatient(id);
+        Patient patient = patientService.read(id);
 
         model.addAttribute("patient", Objects.requireNonNullElseGet(patient, Patient::new));
 
@@ -44,19 +44,18 @@ public class PatientController {
         if (bindingResult.hasErrors()) {
             return "patientForm";
         }
-        patientService.addOrUpdatePatient(patient);
-        patientList = patientService.readPatients();
-        return "redirect:/";
+        patientService.addOrUpdate(patient);
+        patientList = patientService.readAll();
+        return HOME;
     }
 
     @PostMapping("/patient/delete/{id}")
     public String deletePatient(@PathVariable Long id) {
         log.info("DELETING PATIENT");
-        patientService.deletePatient(patientService.readPatient(id));
-        patientList = patientService.readPatients();
+        patientService.delete(patientService.read(id));
+        patientList = patientService.readAll();
 
         //TODO delete notes
-
-        return "redirect:/";
+        return HOME;
     }
 }
