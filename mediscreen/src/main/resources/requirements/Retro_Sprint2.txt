@@ -8,6 +8,7 @@ Things that could have gone better:
 Writing unit tests before the code
 More through explanation from Product Owner in email about what is required, tickets weren't clear
 Sample commands changed port to 8082 from 8081 as specified in first sprint which was confusing
+Create user stories before development
 
 Something I'd like to try to do differently:
 TDD
