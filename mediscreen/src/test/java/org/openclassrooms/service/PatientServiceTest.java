@@ -1,5 +1,5 @@
 package org.openclassrooms.service;
 
-public class PatientService {
+public class PatientServiceTest {
     //TODO tests
 }

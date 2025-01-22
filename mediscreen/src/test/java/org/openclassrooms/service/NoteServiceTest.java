@@ -1,5 +1,5 @@
 package org.openclassrooms.service;
 
-public class NoteService {
+public class NoteServiceTest {
     //TODO tests
 }

@@ -3,6 +3,7 @@ package org.openclassrooms.mediscreen.controller;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.openclassrooms.mediscreen.constants.GlobalConstants;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.service.PatientService;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,6 @@ import java.util.Objects;
 @Slf4j
 public class PatientController {
 
-    private static final String HOME = "redirect:/";
     private final PatientService patientService;
     @Getter
     private List<Patient> patientList;
@@ -46,7 +46,7 @@ public class PatientController {
         }
         patientService.addOrUpdate(patient);
         patientList = patientService.readAll();
-        return HOME;
+        return GlobalConstants.HOME;
     }
 
     @PostMapping("/patient/delete/{id}")
@@ -56,6 +56,6 @@ public class PatientController {
         patientList = patientService.readAll();
 
         //TODO delete notes
-        return HOME;
+        return GlobalConstants.HOME;
     }
 }

@@ -1,6 +1,7 @@
 package org.openclassrooms.mediscreen.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.openclassrooms.mediscreen.constants.GlobalConstants;
 import org.openclassrooms.mediscreen.model.Note;
 import org.openclassrooms.mediscreen.service.NoteService;
 import org.springframework.stereotype.Controller;
@@ -27,11 +28,11 @@ public class NoteController {
     @GetMapping("/patHistory")
     public String showNoteForm(@RequestParam Long id, Model model) {
         log.info("NOTE FORM PAGE");
-        log.info("id: {}", id);
 
         Note note;
         try {
             note = noteService.read(id);
+            // TODO throw exception if newNote is null
         } catch (NoSuchElementException e) {
             log.error("Error retrieving notes for patient id");
             note = new Note(id);
@@ -45,7 +46,6 @@ public class NoteController {
     @PostMapping("/patHistory/add")
     public String submitNoteForm(Long patId, String note) {
         log.info("SUBMITTING NOTE");
-        log.info("patId {}, note\n{}", patId, note);
 
         // TODO move into service
         Note newNote;
@@ -58,13 +58,12 @@ public class NoteController {
             log.error("Error saving notes for patId");
             newNote = new Note(patId);
             doctorNotes = new ArrayList<>();
-
         }
         doctorNotes.add(note);
         newNote.setDoctorNotes(doctorNotes);
 
         noteService.addOrUpdate(newNote);
-        return "redirect:/";
+        return GlobalConstants.HOME;
     }
 
 }

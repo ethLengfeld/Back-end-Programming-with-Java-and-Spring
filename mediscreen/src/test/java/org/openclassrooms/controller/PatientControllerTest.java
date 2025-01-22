@@ -1,5 +1,5 @@
 package org.openclassrooms.controller;
 
-public class NoteController {
+public class PatientControllerTest {
     //TODO tests
 }
