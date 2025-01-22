@@ -1,6 +1,7 @@
 package org.openclassrooms.mediscreen.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.sql.ast.tree.expression.Over;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class PatientService {
+public class PatientService implements CrudService<Patient> {
 
     private final PatientRepository patientRepository;
 
@@ -17,12 +18,14 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    public void addOrUpdatePatient(Patient patient) {
+    @Override
+    public void addOrUpdate(Patient patient) {
         log.info("SAVING PATIENT");
         patientRepository.save(patient);
     }
 
-    public Patient readPatient(Long id) {
+    @Override
+    public Patient read(Long id) {
         log.info("READING PATIENT WITH id:::{}", id);
         if (id == null) {
             return null;
@@ -30,12 +33,14 @@ public class PatientService {
         return patientRepository.findById(id).get();
     }
 
-    public List<Patient> readPatients() {
+    @Override
+    public List<Patient> readAll() {
         log.info("READING ALL PATIENTS");
         return patientRepository.findAll();
     }
 
-    public void deletePatient(Patient patient) {
+    @Override
+    public void delete(Patient patient) {
         log.info("DELETING PATIENT");
         patientRepository.delete(patient);
     }
