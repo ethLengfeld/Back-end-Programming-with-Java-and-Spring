@@ -1,7 +1,6 @@
 package org.openclassrooms.mediscreen.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.ast.tree.expression.Over;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.repository.PatientRepository;
 import org.springframework.stereotype.Service;
