@@ -34,12 +34,14 @@ public class NoteService implements CrudService<Note> {
 
     @Override
     public List<Note> readAll() {
-        log.info("READING ALL NOTES");
-        return noteRepository.findAll();
+        log.info("noop");
+        return null;
+//        return noteRepository.findAll();
     }
 
     @Override
     public void delete(Note note) {
         // noop
+//        noteRepository.delete(note);
     }
 }
