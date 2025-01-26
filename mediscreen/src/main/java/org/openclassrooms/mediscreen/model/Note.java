@@ -22,4 +22,6 @@ public class Note {
         this.doctorNotes = new ArrayList<>();
     }
 
+    public Note() {
+    }
 }
