@@ -56,6 +56,12 @@
                         <button type="submit">Add New Note</button>
                     </form>
                 </td>
+                <td>
+                    <form th:action="@{/assess}" method="get">
+                        <input type="hidden" name="id" th:value="${patient.id}"/>
+                        <button type="submit">View Patient Assessment</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

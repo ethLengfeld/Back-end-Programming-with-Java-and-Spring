@@ -1,5 +1,8 @@
 package org.openclassrooms.mediscreen.constants;
 
+import lombok.Getter;
+
+@Getter
 public enum HealthAssessment {
     NONE("None")
     /*    None - patient has no doctor’s notes containing any of the trigger terminology. */,
@@ -25,7 +28,4 @@ public enum HealthAssessment {
         this.value = value;
     }
 
-    public String getValue() {
-        return this.value;
-    }
 }

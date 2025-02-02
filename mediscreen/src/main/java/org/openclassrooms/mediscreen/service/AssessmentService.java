@@ -16,7 +16,6 @@ public class AssessmentService {
     }
 
     public String assessPatient(Long id, String familyName) {
-
         Patient patient = null;
         if (id != null) {
             patient = patientService.read(id);

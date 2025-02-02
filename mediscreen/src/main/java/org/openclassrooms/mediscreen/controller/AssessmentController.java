@@ -19,7 +19,7 @@ public class AssessmentController {
 
     @GetMapping("/assess")
     public String showAssessment(Model model) {
-        return null;
+        return "assessment";
     }
 
     @PostMapping("/assess/")
