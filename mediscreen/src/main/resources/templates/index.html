@@ -31,8 +31,9 @@
                 <th>Sex</th>
                 <th>Address</th>
                 <th>Phone Number</th>
-                <th></th>
                 <th>Doctor Notes</th>
+                <th>Patient Assessment</th>
+                <th></th>
             </tr>
             </thead>
             <tbody style="border: solid">
@@ -45,12 +46,6 @@
                 <td th:text="${patient.address}">address</td>
                 <td th:text="${patient.phone}">phone number</td>
                 <td>
-                    <a th:href="@{/patient(id=${patient.id})}" href="#" class="btn btn-info" role="button">Edit</a>
-                    <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
                     <form th:action="@{/patHistory}" method="get">
                         <input type="hidden" name="id" th:value="${patient.id}"/>
                         <button type="submit">Add New Note</button>
@@ -62,11 +57,18 @@
                         <button type="submit">View Patient Assessment</button>
                     </form>
                 </td>
+                <td>
+                    <a th:href="@{/patient(id=${patient.id})}" href="#" class="btn btn-info" role="button">Edit</a>
+                    <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
 
+    <br/>
     <div class="row">
         <form th:action="@{/patient}" method="get">
             <button type="submit">Add New Patient</button>

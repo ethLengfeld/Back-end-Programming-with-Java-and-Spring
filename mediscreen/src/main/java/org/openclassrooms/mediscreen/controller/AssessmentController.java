@@ -9,22 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 @Slf4j
 @Controller
 public class AssessmentController {
 
     @GetMapping("/assess")
-    public String showAssessment(Model model) {
+    public String showAssessment(@RequestParam Long id, Model model) {
+        log.info("ASSESSING PATIENT id:{}", id);
         return "assessment";
     }
 
     @PostMapping("/assess/")
-    public String submitAssessment(Long patId, String note) {
-        log.info("SUBMITTING NOTE");
+    public String submitAssessment(Long patId, String familyName) {
+        log.info("ASSESSING PATIENT");
 
         return GlobalConstants.HOME;
     }
