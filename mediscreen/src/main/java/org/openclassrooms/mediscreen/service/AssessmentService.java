@@ -15,7 +15,7 @@ public class AssessmentService {
         this.noteService = noteService;
     }
 
-    public String assessPatient(Long id, String familyName) {
+    public HealthAssessment assessPatient(Long id, String familyName) {
         Patient patient = null;
         if (id != null) {
             patient = patientService.read(id);
@@ -37,6 +37,6 @@ public class AssessmentService {
         }
 
         //TODO implement health logic
-        return HealthAssessment.NONE.getValue();
+        return HealthAssessment.NONE;
     }
 }
