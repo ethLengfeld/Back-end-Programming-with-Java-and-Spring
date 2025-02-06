@@ -6,6 +6,7 @@ import org.openclassrooms.mediscreen.constants.HealthAssessment;
 import org.openclassrooms.mediscreen.model.Note;
 import org.openclassrooms.mediscreen.service.AssessmentService;
 import org.openclassrooms.mediscreen.service.NoteService;
+import org.openclassrooms.mediscreen.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AssessmentController {
 
     private AssessmentService assessmentService;
+    private PatientService patientService;
     private NoteService noteService;
 
-    public AssessmentController(AssessmentService assessmentService, NoteService noteService) {
+    public AssessmentController(AssessmentService assessmentService, PatientService patientService, NoteService noteService) {
         this.assessmentService = assessmentService;
+        this.patientService = patientService;
         this.noteService = noteService;
     }
 
@@ -28,6 +31,7 @@ public class AssessmentController {
     public String showAssessment(@RequestParam Long id, Model model) {
         log.info("ASSESSING PATIENT id:{}", id);
         model.addAttribute("note", noteService.read(id));
+        model.addAttribute("patient", patientService.read(id));
         return "assessment";
     }
 
