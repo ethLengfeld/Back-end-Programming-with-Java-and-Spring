@@ -14,6 +14,8 @@
             <h1><a th:href="@{/}">Mediscreen</a></h1>
         </header>
     </div>
+    <pre th:each="doctorNote : ${note.doctorNotes}" th:text="'- ' + ${doctorNote}"></pre>
+
     <div>
         <p>This Patient is ______</p>
     </div>
