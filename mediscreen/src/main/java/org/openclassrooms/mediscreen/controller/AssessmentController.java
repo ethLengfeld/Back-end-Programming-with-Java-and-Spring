@@ -35,12 +35,13 @@ public class AssessmentController {
         return "assessment";
     }
 
-    @PostMapping("/assess/")
+    //TODO get correct path
+    @PostMapping("/assess/patient")
     public String submitAssessment(Long patId, String familyName) {
         log.info("ASSESSING PATIENT");
 
         HealthAssessment assessment = assessmentService.assessPatient(patId, familyName);
-        return GlobalConstants.HOME;
+        return "assessment";
     }
 
 }

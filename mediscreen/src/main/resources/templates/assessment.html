@@ -21,7 +21,7 @@
 
     <!--  TODO on click, send POST, show result, and highlight the results  -->
     <div class="row">
-        <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post">
+        <form th:action="@{/assess/patient/{id}(id=${patient.id})}" method="post">
             <button type="submit" class="btn">Reveal Patient Assessment</button>
         </form>
     </div>
