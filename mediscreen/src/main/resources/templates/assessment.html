@@ -15,16 +15,12 @@
         </header>
     </div>
     <div class="row">
-        <h2 th:text="'Patient was born on ' + ${patient.dob}"></h2>
+        <h1 th:text="'Patient is considered ' + ${healthAssessment}"></h1>
+    </div>
+    <div class="row">
+        <h2 th:text="'Patient is ' + ${age} + ' year(s) old'"></h2>
     </div>
     <pre th:each="doctorNote : ${note.doctorNotes}" th:text="'- ' + ${doctorNote}"></pre>
-
-    <!--  TODO on click, send POST, show result, and highlight the results  -->
-    <div class="row">
-        <form th:action="@{/assess/patient/{id}(id=${patient.id})}" method="post">
-            <button type="submit" class="btn">Reveal Patient Assessment</button>
-        </form>
-    </div>
 
     <footer>
         <p>&copy; 2025 Mediscreen</p>

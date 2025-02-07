@@ -1,6 +1,7 @@
 package org.openclassrooms.mediscreen.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.openclassrooms.mediscreen.constants.GlobalConstants;
 import org.openclassrooms.mediscreen.constants.HealthAssessment;
 import org.openclassrooms.mediscreen.model.Note;
 import org.openclassrooms.mediscreen.model.Patient;
@@ -19,15 +20,8 @@ public class AssessmentService {
         this.noteService = noteService;
     }
 
-    public HealthAssessment assessPatient(Long id, String familyName) {
-        Patient patient = null;
-        if (id != null) {
-            patient = patientService.read(id);
-        }
-        else {
-            //TODO get patient by familyName
-//            patient = patientService.read(familyName);
-        }
+    public HealthAssessment assessPatient(Patient patient) {
+
         Note patientNote = noteService.read(patient.getId());
 
         int age = PatientUtils.calculateAge(patient.getDob());
@@ -35,12 +29,12 @@ public class AssessmentService {
         int countIndicators = 0;
         for (String note : patientNote.getDoctorNotes()) {
             //TODO fix logic
+//            GlobalConstants.HEALTH_ASSESSMENT_WORDS
             if (note.contains("TODO")) {
                 countIndicators++;
             }
         }
 
-        //TODO implement health logic
         return HealthAssessment.NONE;
     }
 }
