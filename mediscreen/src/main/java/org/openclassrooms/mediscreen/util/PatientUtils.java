@@ -8,7 +8,6 @@ import java.time.format.DateTimeParseException;
 public class PatientUtils {
 
     public static int calculateAge(String dob) {
-        //TODO add logic
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
