@@ -30,7 +30,6 @@ public class PatientController {
     @GetMapping("/patient")
     public String showPatientForm(@RequestParam(required = false) Long id, Model model) {
         log.info("PATIENT FORM PAGE");
-        log.info("id: {}", id);
         Patient patient = patientService.read(id);
 
         model.addAttribute("patient", Objects.requireNonNullElseGet(patient, Patient::new));

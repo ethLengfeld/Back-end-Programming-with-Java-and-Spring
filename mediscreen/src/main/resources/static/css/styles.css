@@ -6,7 +6,6 @@ body, html {
     height: 100%;
 }
 
-
 header {
     background: LightCyan;
     color: black;
@@ -41,5 +40,35 @@ footer {
 }
 
 .content {
-            flex: 1;
+    flex: 1;
+}
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.noneAssessment {
+    color: green;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.borderlineAssessment {
+    color: orange;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.inDangerAssessment {
+    color: yellow;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.earlyOnsetAssessment {
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
 }

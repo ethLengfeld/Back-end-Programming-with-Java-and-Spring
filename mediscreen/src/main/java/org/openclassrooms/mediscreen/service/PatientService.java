@@ -1,7 +1,6 @@
 package org.openclassrooms.mediscreen.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.ast.tree.expression.Over;
 import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,14 @@ public class PatientService implements CrudService<Patient> {
             return null;
         }
         return patientRepository.findById(id).get();
+    }
+
+    public Patient readFamily(String family) {
+        log.info("READING PATIENT WITH family:::{}", family);
+        if (family == null) {
+            return null;
+        }
+        return patientRepository.findByFamily(family).get();
     }
 
     @Override
