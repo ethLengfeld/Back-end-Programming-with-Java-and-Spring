@@ -8,33 +8,59 @@ import org.openclassrooms.mediscreen.model.Patient;
 import org.openclassrooms.mediscreen.util.PatientUtils;
 import org.springframework.stereotype.Controller;
 
+import java.util.Locale;
+
 @Slf4j
 @Controller
 public class AssessmentService {
 
-    private PatientService patientService;
-    private NoteService noteService;
+    public AssessmentService() {}
 
-    public AssessmentService(PatientService patientService, NoteService noteService) {
-        this.patientService = patientService;
-        this.noteService = noteService;
-    }
-
-    public HealthAssessment assessPatient(Patient patient) {
-
-        Note patientNote = noteService.read(patient.getId());
-
+    public HealthAssessment assessPatient(Patient patient, Note patientNote) {
+        char sex = patient.getSex();
         int age = PatientUtils.calculateAge(patient.getDob());
 
-        int countIndicators = 0;
+        int countTriggerTerms = 0;
         for (String note : patientNote.getDoctorNotes()) {
-            //TODO fix logic
-//            GlobalConstants.HEALTH_ASSESSMENT_WORDS
-            if (note.contains("TODO")) {
-                countIndicators++;
+            for (String triggerTerm : GlobalConstants.HEALTH_ASSESSMENT_TRIGGER_TERM) {
+                if (note.toLowerCase(Locale.ROOT).contains(triggerTerm.toLowerCase(Locale.ROOT))) {
+                    countTriggerTerms++;
+                }
             }
         }
 
+        if (age > 30) {
+            log.info("OVER 30 YR");
+            if (countTriggerTerms >= 2 && countTriggerTerms < 6) {
+                return HealthAssessment.BORDERLINE;
+            }
+            else if (countTriggerTerms >= 6 && countTriggerTerms < 8) {
+                return HealthAssessment.IN_DANGER;
+            }
+            else if (countTriggerTerms >= 8) {
+                return HealthAssessment.EARLY_ONSET;
+            }
+        }
+        else {
+            if (sex == 'M') {
+                log.info("UNDER 30 YR MALE");
+                if (countTriggerTerms >= 3 && countTriggerTerms < 5) {
+                    return HealthAssessment.IN_DANGER;
+                }
+                else if (countTriggerTerms >= 5) {
+                    return HealthAssessment.EARLY_ONSET;
+                }
+            }
+            else {
+                log.info("UNDER 30 YR FEMALE");
+                if (countTriggerTerms >= 4 && countTriggerTerms < 7) {
+                    return HealthAssessment.IN_DANGER;
+                }
+                else if (countTriggerTerms >= 7) {
+                    return HealthAssessment.EARLY_ONSET;
+                }
+            }
+        }
         return HealthAssessment.NONE;
     }
 }

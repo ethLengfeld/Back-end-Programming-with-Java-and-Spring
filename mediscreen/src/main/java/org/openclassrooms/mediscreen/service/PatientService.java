@@ -32,6 +32,14 @@ public class PatientService implements CrudService<Patient> {
         return patientRepository.findById(id).get();
     }
 
+    public Patient readFamily(String family) {
+        log.info("READING PATIENT WITH family:::{}", family);
+        if (family == null) {
+            return null;
+        }
+        return patientRepository.findByFamily(family).get();
+    }
+
     @Override
     public List<Patient> readAll() {
         log.info("READING ALL PATIENTS");

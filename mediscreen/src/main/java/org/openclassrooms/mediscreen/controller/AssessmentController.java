@@ -8,6 +8,7 @@ import org.openclassrooms.mediscreen.service.AssessmentService;
 import org.openclassrooms.mediscreen.service.NoteService;
 import org.openclassrooms.mediscreen.service.PatientService;
 import org.openclassrooms.mediscreen.util.PatientUtils;
+import org.openclassrooms.mediscreen.util.TemplateUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,14 +44,15 @@ public class AssessmentController {
         }
         else {
             log.info("RETRIEVING NOTE & PATIENT BY familyName");
-            //TODO add query for selecting by familyName
-//            patient = patientService.read(familyName);
+            patient = patientService.readFamily(familyName);
             note = noteService.read(patient.getId());
         }
 
-        HealthAssessment healthAssessment = assessmentService.assessPatient(patient);
-        model.addAttribute("note", note);
-        model.addAttribute("healthAssessment", healthAssessment.getValue());
+        HealthAssessment patientAssessment = assessmentService.assessPatient(patient, note);
+        log.info("PATIENT ASSESSMENT - {}", patientAssessment.getValue());
+        model.addAttribute("patient", patient);
+        model.addAttribute("doctorNotes", TemplateUtils.highlightTriggerTerms(note));
+        model.addAttribute("patientAssessment", TemplateUtils.colorCodeHealthAssessment(patientAssessment));
         model.addAttribute("age", PatientUtils.calculateAge(patient.getDob()));
 
         return "assessment";

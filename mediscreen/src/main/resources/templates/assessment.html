@@ -14,13 +14,14 @@
             <h1><a th:href="@{/}">Mediscreen</a></h1>
         </header>
     </div>
+
     <div class="row">
-        <h1 th:text="'Patient is considered ' + ${healthAssessment}"></h1>
+        <h2 th:text="${patient.given} + ' ' + ${patient.family} + ' is ' + ${age} + ' year(s) old'"></h2>
     </div>
+    <pre th:each="doctorNote : ${doctorNotes}" th:utext="'- ' + ${doctorNote}"></pre>
     <div class="row">
-        <h2 th:text="'Patient is ' + ${age} + ' year(s) old'"></h2>
+        <h1 th:utext="${patient.given} + ' ' + ${patient.family} + '\'s Health Assessment ' + ${patientAssessment}"></h1>
     </div>
-    <pre th:each="doctorNote : ${note.doctorNotes}" th:text="'- ' + ${doctorNote}"></pre>
 
     <footer>
         <p>&copy; 2025 Mediscreen</p>
