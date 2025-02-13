@@ -3,19 +3,16 @@ package org.openclassrooms.mediscreen;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.openclassrooms.mediscreen.model.Patient;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PopulateTestData {
 
@@ -25,12 +22,9 @@ public class PopulateTestData {
     public static void main(String[] args) {
         HttpClient mediscreenHttpClient = HttpClient.newHttpClient();
         //patients
-//        parseAndLoadPatients(mediscreenHttpClient);
+        Map<String, Long> patientIdMap = parseAndLoadPatients(mediscreenHttpClient);
         //notes
-        //TODO
-        // read through 'Practitioner+Notes+Sample.csv'
-        // call http://localhost:8081/patHistory/add?patId=x&note=x
-//        parseAndLoadNotes(mediscreenHttpClient);
+        parseAndLoadNotes(mediscreenHttpClient, patientIdMap);
     }
 
     /**
@@ -38,7 +32,8 @@ public class PopulateTestData {
      *
      * @param httpClient
      */
-    private static void parseAndLoadPatients(HttpClient httpClient) {
+    private static Map<String, Long> parseAndLoadPatients(HttpClient httpClient) {
+        Map<String, Long> patientIdMap = new HashMap<>();
         File patientDataFile = new File(
                 "./mediscreen/src/main/resources/data/Patient+Demographics+Sample.csv");
 
@@ -61,13 +56,23 @@ public class PopulateTestData {
                         .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                         .build();
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8081/load/patient/info?family=" + family)) // Replace with your URL
+                        .header("Content-Type", "application/x-www-form-urlencoded") // Form data type
+                        .GET()
+                        .build();
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                patientIdMap.put(family, Long.parseLong(response.body()));
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return patientIdMap;
     }
 
-    private static void parseAndLoadNotes(HttpClient httpClient) {
+    private static void parseAndLoadNotes(HttpClient httpClient, Map<String, Long> patientIdMap) {
         File patientDataFile = new File(
                 "./mediscreen/src/main/resources/data/Practitioner+Notes+Sample.csv");
 
@@ -79,16 +84,14 @@ public class PopulateTestData {
             for (CSVRecord record : csvParser) {
                 String lastName = record.get("Patient");
                 String note = record.get("Notes");
-                //TODO get patient id
-                int id = 1;
+                Long id = patientIdMap.get(lastName);
                 String body = String.format(NOTE_REQUEST_BODY, id, note);
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("http://localhost:8081/patHistory/add")) // Replace with your URL
                         .header("Content-Type", "application/x-www-form-urlencoded") // Form data type
                         .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                         .build();
-                //TODO send request
-                httpClient.send(null, HttpResponse.BodyHandlers.ofString());
+                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
