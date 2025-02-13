@@ -72,7 +72,7 @@
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
-            <version>3.0.2</version>
+            <version>LATEST</version>
         </dependency>
 
         <!-- annotation validator -->
@@ -80,7 +80,15 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
+
+        <!-- csv -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>

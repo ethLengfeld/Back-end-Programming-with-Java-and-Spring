@@ -1,4 +1,4 @@
-create table PATIENT (
+create table PATIENTS (
 	id SERIAL primary key,
 	family varchar(256),
 	given varchar(256),

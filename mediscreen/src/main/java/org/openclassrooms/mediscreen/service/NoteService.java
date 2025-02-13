@@ -29,6 +29,7 @@ public class NoteService implements CrudService<Note> {
         if (id == null) {
             return null;
         }
+        //TODO fix no notes returned id=10
         return noteRepository.findById(id).get();
     }
 
