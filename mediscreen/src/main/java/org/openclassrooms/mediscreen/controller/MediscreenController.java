@@ -16,7 +16,6 @@ public class MediscreenController {
     private final PatientService patientService;
     private List<Patient> patientList;
 
-
     public MediscreenController(PatientService patientService) {
         this.patientService = patientService;
         this.patientList = this.patientService.readAll();

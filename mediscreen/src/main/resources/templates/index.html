@@ -52,11 +52,11 @@
                     </form>
                 </td>
                 <td>
-                    <form th:action="@{/assess/patient}" method="get">
+                    <form th:action="@{/view/assess/patient}" method="get">
                         <input type="hidden" name="id" th:value="${patient.id}"/>
                         <button type="submit">View Patient Assessment by id</button>
                     </form>
-                    <form th:action="@{/assess/patient}" method="get">
+                    <form th:action="@{/view/assess/patient}" method="get">
                         <input type="hidden" name="familyName" th:value="${patient.family}"/>
                         <button type="submit">View Patient Assessment by familyName</button>
                     </form>

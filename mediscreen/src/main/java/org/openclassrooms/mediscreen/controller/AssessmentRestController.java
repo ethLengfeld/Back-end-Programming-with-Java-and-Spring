@@ -9,31 +9,30 @@ import org.openclassrooms.mediscreen.service.NoteService;
 import org.openclassrooms.mediscreen.service.PatientService;
 import org.openclassrooms.mediscreen.util.PatientUtils;
 import org.openclassrooms.mediscreen.util.TemplateUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Controller
-public class AssessmentController {
+@RestController
+public class AssessmentRestController {
 
     private AssessmentService assessmentService;
     private PatientService patientService;
     private NoteService noteService;
 
-    public AssessmentController(AssessmentService assessmentService,
-                                PatientService patientService,
-                                NoteService noteService) {
+    public AssessmentRestController(AssessmentService assessmentService,
+                                    PatientService patientService,
+                                    NoteService noteService) {
         this.assessmentService = assessmentService;
         this.patientService = patientService;
         this.noteService = noteService;
     }
 
-    @GetMapping("/view/assess/patient")
-    public String showAssessment(@RequestParam(required = false) Long id,
-                                 @RequestParam(required = false) String familyName,
-                                 Model model) {
+    @GetMapping("/assess/patient")
+    public String getPatientAssessment(@RequestParam(required = false) Long id,
+                                       @RequestParam(required = false) String familyName) {
         log.info("ASSESSING PATIENT id:{} familyName:{}", id, familyName);
         Patient patient = null;
         Note note = null;
@@ -50,12 +49,10 @@ public class AssessmentController {
 
         HealthAssessment patientAssessment = assessmentService.assessPatient(patient, note);
         log.info("PATIENT ASSESSMENT - {}", patientAssessment.getValue());
-        model.addAttribute("patient", patient);
-        model.addAttribute("doctorNotes", TemplateUtils.highlightTriggerTerms(note));
-        model.addAttribute("patientAssessment", TemplateUtils.colorCodeHealthAssessment(patientAssessment));
-        model.addAttribute("age", PatientUtils.calculateAge(patient.getDob()));
+        int age = PatientUtils.calculateAge(patient.getDob());
 
-        return "assessment";
+        return "Patient: " + patient.getGiven() + " " + patient.getFamily() +
+                "(age " + age + ") diabetes assessment is: " + patientAssessment.getValue();
     }
 
 }
