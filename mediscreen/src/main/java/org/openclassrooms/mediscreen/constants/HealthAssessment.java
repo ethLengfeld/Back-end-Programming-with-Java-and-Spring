@@ -10,7 +10,7 @@ public enum HealthAssessment {
     BORDERLINE("Borderline")
     /*    Borderline - patient has a reference to two triggers, and is over 30 years of age. */,
 
-    IN_DANGER("In danger")
+    IN_DANGER("In Danger")
     /*    In danger - depends on patient’s age and sex.
         If under 30 and female, four trigger terms.
         If either over 30, then six.

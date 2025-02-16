@@ -40,6 +40,20 @@ public class PatientServiceTest {
     }
 
     @Test
+    void readFamily() {
+        Patient patient = new Patient();
+        PatientRepository patientRepository = mock(PatientRepository.class);
+        PatientService patientService = new PatientService(patientRepository);
+        when(patientRepository.findByFamily("lastname")).thenReturn(Optional.of(patient));
+        Patient readPatient = patientService.readFamily("lastname");
+        Assertions.assertNotNull(readPatient);
+
+        //negative
+        readPatient = patientService.readFamily(null);
+        Assertions.assertNull(readPatient);
+    }
+
+    @Test
     void readAll() {
         List<Patient> patients = new ArrayList<>(Arrays.asList(new Patient(), new Patient()));
         PatientRepository patientRepository = mock(PatientRepository.class);
