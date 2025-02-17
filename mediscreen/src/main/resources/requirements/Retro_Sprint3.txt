@@ -1,10 +1,16 @@
 Retrospective - Sprint 3
 
 Things that went well:
-TODO
+- Easy to add new endpoint
+- UI clearly reflects new endpoints
+- Easy to integrate existing services
 
 Things that could have gone better:
-TODO
+- Write up from product missed details
+    - POST should've been a GET
+    - Health Assessment wasn't clear when trigger terms were between
+- More testing data
 
 Something I'd like to try to do differently:
-TODO
+- Implement using TDD to start
+- More UI features added to app
