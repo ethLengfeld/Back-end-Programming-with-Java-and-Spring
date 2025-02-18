@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+
 @Slf4j
 @Controller
 public class AssessmentController {
@@ -35,17 +37,25 @@ public class AssessmentController {
                                  @RequestParam(required = false) String familyName,
                                  Model model) {
         log.info("ASSESSING PATIENT id:{} familyName:{}", id, familyName);
-        Patient patient = null;
-        Note note = null;
+        Patient patient;
+        Note note;
         if (id != null) {
             log.info("RETRIEVING NOTE & PATIENT BY id");
             patient = patientService.read(id);
             note = noteService.read(id);
+            if (note == null) {
+                note = new Note();
+                note.setDoctorNotes(new ArrayList<>());
+            }
         }
         else {
             log.info("RETRIEVING NOTE & PATIENT BY familyName");
             patient = patientService.readFamily(familyName);
             note = noteService.read(patient.getId());
+            if (note == null) {
+                note = new Note();
+                note.setDoctorNotes(new ArrayList<>());
+            }
         }
 
         HealthAssessment patientAssessment = assessmentService.assessPatient(patient, note);

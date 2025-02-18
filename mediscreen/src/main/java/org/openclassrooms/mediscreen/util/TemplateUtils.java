@@ -10,6 +10,10 @@ import java.util.List;
 public class TemplateUtils {
 
     public static List<String> highlightTriggerTerms(Note note) {
+        if (note.getDoctorNotes() == null) {
+            return new ArrayList<>();
+        }
+
         List<String> highlightedNotes = new ArrayList<>();
         for (String doctorNote : note.getDoctorNotes()) {
             for (String triggerTerm : GlobalConstants.HEALTH_ASSESSMENT_TRIGGER_TERM) {

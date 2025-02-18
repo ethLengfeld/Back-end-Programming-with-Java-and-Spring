@@ -12,6 +12,9 @@ public class HealthAssessmentUtils {
 
     public static int countTriggerTerms(Note patientNote) {
         int countTriggerTerms = 0;
+        if (patientNote.getDoctorNotes() == null) {
+            return countTriggerTerms;
+        }
         for (String note : patientNote.getDoctorNotes()) {
             for (String triggerTerm : GlobalConstants.HEALTH_ASSESSMENT_TRIGGER_TERM) {
                 if (note.toLowerCase(Locale.ROOT).contains(triggerTerm.toLowerCase(Locale.ROOT))) {

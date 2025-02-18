@@ -6,6 +6,7 @@ import org.openclassrooms.mediscreen.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,8 +30,8 @@ public class NoteService implements CrudService<Note> {
         if (id == null) {
             return null;
         }
-        //TODO fix no notes returned id=10
-        return noteRepository.findById(id).get();
+        Optional<Note> note = noteRepository.findById(id);
+        return note.orElse(null);
     }
 
     @Override
