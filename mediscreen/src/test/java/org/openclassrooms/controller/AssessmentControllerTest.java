@@ -37,10 +37,16 @@ public class AssessmentControllerTest {
         when(patientService.read(1L)).thenReturn(patient);
         when(noteService.read(1L)).thenReturn(note);
         when(patientService.readFamily("familyName")).thenReturn(patient);
-        when(noteService.read(1L)).thenReturn(note);
         when(assessmentService.assessPatient(any(), any())).thenReturn(HealthAssessment.NONE);
 
         assertEquals("assessment", assessmentController.showAssessment(1L, null, model));
         assertEquals("assessment", assessmentController.showAssessment(null, "familyName", model));
+
+        patient.setId(2L);
+        when(patientService.read(2L)).thenReturn(patient);
+        when(noteService.read(2L)).thenReturn(null);
+        when(patientService.readFamily("newFamilyName")).thenReturn(patient);
+        assertEquals("assessment", assessmentController.showAssessment(2L, null, model));
+        assertEquals("assessment", assessmentController.showAssessment(null, "newFamilyName", model));
     }
 }

@@ -16,6 +16,10 @@ public class HealthAssessmentUtilsTest {
         Note note = new Note();
         note.setDoctorNotes(List.of("body weight", "this is a note"));
         assertEquals(1, HealthAssessmentUtils.countTriggerTerms(note));
+
+        note.setDoctorNotes(null);
+        assertEquals(0, HealthAssessmentUtils.countTriggerTerms(note));
+
     }
 
     @Test

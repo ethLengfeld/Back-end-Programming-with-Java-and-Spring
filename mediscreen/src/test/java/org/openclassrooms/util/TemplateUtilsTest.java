@@ -8,6 +8,7 @@ import org.openclassrooms.mediscreen.util.TemplateUtils;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TemplateUtilsTest {
 
@@ -20,6 +21,10 @@ public class TemplateUtilsTest {
 
         List<String> highlightedTerms = TemplateUtils.highlightTriggerTerms(note);
         assertEquals("patient's <span class='highlight'>Body Height</span> is on track", highlightedTerms.get(0));
+
+        note.setDoctorNotes(null);
+        highlightedTerms = TemplateUtils.highlightTriggerTerms(note);
+        assertEquals(0, highlightedTerms.size());
     }
 
     @Test
