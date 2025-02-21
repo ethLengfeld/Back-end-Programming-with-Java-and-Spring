@@ -1,0 +1,23 @@
+Mediscreen
+REST API Specification
+
+Name: Get Health Assessment
+
+URL: /assess/patient
+
+Method: get
+
+URL Parameters: Required: event=[JSON]
+
+Data Parameters: event={"id":[long], "family":[string]}
+
+Response (Success): Code: 200
+Content: “OK”
+
+Response (Failure): Code: 400
+Content: “Patient: <given family> (age <age>) diabetes assessment is: <health assessment>"
+
+Sample Call:
+curl -d "id=1" -X GET http://localhost:8080/assess/id
+
+Notes: None
