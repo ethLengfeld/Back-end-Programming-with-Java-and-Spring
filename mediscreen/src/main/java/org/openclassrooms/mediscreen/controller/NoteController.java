@@ -52,10 +52,9 @@ public class NoteController {
         List<String> doctorNotes;
         try {
             newNote = noteService.read(patId);
-            // TODO throw exception if newNote is null
             doctorNotes = newNote.getDoctorNotes();
-        } catch (NoSuchElementException e) {
-            log.error("Error saving notes for patId");
+        } catch (NoSuchElementException | NullPointerException e) {
+            log.error("ERROR SAVING NOTES FOR PatId");
             newNote = new Note(patId);
             doctorNotes = new ArrayList<>();
         }
